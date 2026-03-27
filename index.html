@@ -42,6 +42,11 @@
     .p-link { color: #007bff !important; text-decoration: underline !important; font-weight: bold; cursor: pointer; display: block; white-space: normal; }
     .t-online-col { background: #eceff1; color: #455a64; font-weight: bold; }
 
+    /* Number Input Oklarını Gizleme */
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; }
+
     /* SİPARİŞ FORMU STİLLERİ */
     .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
     .form-header img { height: 50px; object-fit: contain; }
@@ -55,7 +60,13 @@
     #siparisTable td { font-size: 12px; padding: 4px; white-space: normal; word-wrap: break-word; }
     .form-input-cell { width: 100%; box-sizing: border-box; border: none; border-bottom: 1px solid #ccc; padding: 2px; text-align: center; background: transparent; font-weight: bold;}
     
-    .kurallar { font-size: 10px; text-align: left; margin-top: 15px; line-height: 1.4; border: 1px solid #ccc; padding: 10px; background: #fafafa; }
+    /* ÖDEME TABLOSU STİLLERİ */
+    #odemeTable { width: 60%; float: right; margin-top: 15px; margin-bottom: 15px; border-collapse: collapse; }
+    #odemeTable th, #odemeTable td { border: 1px solid #ccc; font-size: 12px; padding: 4px; }
+    #odemeTable th { background: #f1f3f5; color: #333; font-weight: bold; height: 25px; }
+    #odemeTable .header-dark { background: #444; color: white; font-size: 13px; }
+
+    .kurallar { font-size: 10px; text-align: left; margin-top: 15px; line-height: 1.4; border: 1px solid #ccc; padding: 10px; background: #fafafa; clear: both; }
     .kurallar p { margin: 4px 0; }
     
     /* YENİ EKLENEN NOT KUTUSU */
@@ -79,6 +90,8 @@
       .form-input-cell { border-bottom: 1px solid #000; }
       #siparisTable th { background: #ddd !important; color: #000 !important; border-color: #000; -webkit-print-color-adjust: exact; }
       #siparisTable td { border-color: #000; }
+      #odemeTable th { -webkit-print-color-adjust: exact; }
+      #odemeTable .header-dark { background: #ddd !important; color: #000 !important; }
       .ozel-not-kutusu { border: none !important; color: #000; resize: none; overflow: hidden; }
       .ozel-not-kutusu::placeholder { color: transparent; }
     }
@@ -151,6 +164,50 @@
     </thead>
     <tbody id="siparis-urunler-tbody">
       </tbody>
+  </table>
+
+  <table id="odemeTable">
+    <thead>
+      <tr>
+        <th colspan="4" class="header-dark">TAHSİLATLAR ( MÜŞTERİ ÖDEMELERİ )</th>
+      </tr>
+      <tr>
+        <th style="width:30px;">NO</th>
+        <th style="width:100px;">TARİH</th>
+        <th>ÖDEME ŞEKLİ</th>
+        <th style="width:120px;">ÖDENEN TUTAR</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align:center;">1</td>
+        <td><input type="date" class="form-input-cell" style="font-weight:normal;"></td>
+        <td><input type="text" class="form-input-cell" style="font-weight:normal;"></td>
+        <td><input type="text" class="form-input-cell" placeholder="TL" onfocus="this.value = this.value.replace(/[^0-9]/g, '')" onblur="let v = this.value.replace(/[^0-9]/g, ''); if(v) this.value = parseInt(v).toLocaleString('tr-TR') + ' ₺';"></td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">2</td>
+        <td><input type="date" class="form-input-cell" style="font-weight:normal;"></td>
+        <td><input type="text" class="form-input-cell" style="font-weight:normal;"></td>
+        <td><input type="text" class="form-input-cell" placeholder="TL" onfocus="this.value = this.value.replace(/[^0-9]/g, '')" onblur="let v = this.value.replace(/[^0-9]/g, ''); if(v) this.value = parseInt(v).toLocaleString('tr-TR') + ' ₺';"></td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">3</td>
+        <td><input type="date" class="form-input-cell" style="font-weight:normal;"></td>
+        <td><input type="text" class="form-input-cell" style="font-weight:normal;"></td>
+        <td><input type="text" class="form-input-cell" placeholder="TL" onfocus="this.value = this.value.replace(/[^0-9]/g, '')" onblur="let v = this.value.replace(/[^0-9]/g, ''); if(v) this.value = parseInt(v).toLocaleString('tr-TR') + ' ₺';"></td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">4</td>
+        <td><input type="date" class="form-input-cell" style="font-weight:normal;"></td>
+        <td><input type="text" class="form-input-cell" style="font-weight:normal;"></td>
+        <td><input type="text" class="form-input-cell" placeholder="TL" onfocus="this.value = this.value.replace(/[^0-9]/g, '')" onblur="let v = this.value.replace(/[^0-9]/g, ''); if(v) this.value = parseInt(v).toLocaleString('tr-TR') + ' ₺';"></td>
+      </tr>
+      <tr>
+        <td colspan="3" style="text-align:right; font-weight:bold; padding-right:15px; background:#f1f3f5;">KALAN BAKİYE :</td>
+        <td><input type="text" class="form-input-cell" placeholder="TL" style="color:red; font-size:14px;" onfocus="this.value = this.value.replace(/[^0-9]/g, '')" onblur="let v = this.value.replace(/[^0-9]/g, ''); if(v) this.value = parseInt(v).toLocaleString('tr-TR') + ' ₺';"></td>
+      </tr>
+    </tbody>
   </table>
 
   <div class="kurallar">
