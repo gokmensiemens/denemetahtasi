@@ -48,51 +48,53 @@
     input[type=number] { -moz-appearance: textfield; }
 
     /* SİPARİŞ FORMU STİLLERİ */
-    .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-    .form-header img { height: 50px; object-fit: contain; }
-    .form-header h2 { margin: 0; color: #333; font-size: 24px; text-align: center; flex-grow: 1; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
-    .form-group { display: flex; align-items: center; margin-bottom: 5px; }
-    .form-group label { width: 150px; font-weight: bold; font-size: 13px; }
-    .form-group input { flex-grow: 1; padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
+    .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .form-header img { height: 40px; object-fit: contain; }
+    .form-header h2 { margin: 0; color: #333; font-size: 22px; text-align: center; flex-grow: 1; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
+    .form-group { display: flex; align-items: center; margin-bottom: 3px; }
+    .form-group label { width: 140px; font-weight: bold; font-size: 12px; }
+    .form-group input { flex-grow: 1; padding: 2px 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; height: 20px;}
     
-    #siparisTable th { background: #444; height: 30px; font-size: 12px; }
-    #siparisTable td { font-size: 12px; padding: 4px; white-space: normal; word-wrap: break-word; }
-    .form-input-cell { width: 100%; box-sizing: border-box; border: none; border-bottom: 1px solid #ccc; padding: 2px; text-align: center; background: transparent; font-weight: bold;}
+    /* GÜNCELLENEN TABLO STİLLERİ: Yazı küçültüldü ve tek satır zorunluluğu getirildi */
+    #siparisTable { table-layout: fixed; width: 100%; margin-bottom: 5px;}
+    #siparisTable th { background: #444; color: white; height: 22px; font-size: 11px; padding: 2px; }
+    #siparisTable td { font-size: 11px; padding: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .form-input-cell { width: 100%; box-sizing: border-box; border: none; border-bottom: 1px solid #ccc; padding: 2px; text-align: center; background: transparent; font-weight: bold; font-size: 11px; height: 20px;}
     
     /* ÖDEME TABLOSU STİLLERİ */
-    #odemeTable { width: 60%; float: right; margin-top: 15px; margin-bottom: 15px; border-collapse: collapse; }
-    #odemeTable th, #odemeTable td { border: 1px solid #ccc; font-size: 12px; padding: 4px; }
-    #odemeTable th { background: #f1f3f5; color: #333; font-weight: bold; height: 25px; }
-    #odemeTable .header-dark { background: #444; color: white; font-size: 13px; }
+    #odemeTable { width: 60%; float: right; margin-top: 5px; margin-bottom: 5px; border-collapse: collapse; }
+    #odemeTable th, #odemeTable td { border: 1px solid #ccc; font-size: 11px; padding: 2px; height: 20px;}
+    #odemeTable th { background: #f1f3f5; color: #333; font-weight: bold; }
+    #odemeTable .header-dark { background: #444; color: white; font-size: 12px; }
 
-    .kurallar { font-size: 10px; text-align: left; margin-top: 15px; line-height: 1.4; border: 1px solid #ccc; padding: 10px; background: #fafafa; clear: both; }
-    .kurallar p { margin: 4px 0; }
+    .kurallar { font-size: 9.5px; text-align: left; margin-top: 5px; line-height: 1.3; border: 1px solid #ccc; padding: 8px; background: #fafafa; clear: both; }
+    .kurallar p { margin: 3px 0; }
     
     /* YENİ EKLENEN NOT KUTUSU */
-    .ozel-not-kutusu { width: 100%; box-sizing: border-box; margin: 10px 0; padding: 8px; border: 2px dashed #dc3545; border-radius: 4px; color: red; font-weight: bold; font-size: 12px; font-family: inherit; resize: vertical; min-height: 40px; }
+    .ozel-not-kutusu { width: 100%; box-sizing: border-box; margin: 5px 0; padding: 6px; border: 2px dashed #dc3545; border-radius: 4px; color: red; font-weight: bold; font-size: 11px; font-family: inherit; resize: vertical; min-height: 35px; }
     .ozel-not-kutusu::placeholder { color: red; opacity: 0.7; }
     
-    .imza-alani { display: flex; justify-content: space-between; margin-top: 30px; padding: 0 20px; }
-    .imza-kutu { text-align: center; font-weight: bold; font-size: 13px; }
+    .imza-alani { display: flex; justify-content: space-between; margin-top: 15px; padding: 0 20px; }
+    .imza-kutu { text-align: center; font-weight: bold; font-size: 12px; }
 
     .print-btn { background: #28a745; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; float: right; margin-top: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: background 0.3s; }
     .print-btn:hover { background: #218838; }
 
     /* YAZDIRMA AYARLARI */
     @media print {
-      @page { size: A4 portrait; margin: 10mm; }
+      @page { size: A4 portrait; margin: 5mm; } /* Kenar boşluğu daraltıldı */
       body { background: white; padding: 0; }
       .no-print, .search-container, #mainTable, #statusMsg { display: none !important; }
       .card { box-shadow: none; border: none; width: 100%; margin: 0; padding: 0; }
-      #siparis-formu-container { display: block !important; }
-      .form-group input { border: none; border-bottom: 1px solid #000; border-radius: 0; }
-      .form-input-cell { border-bottom: 1px solid #000; }
+      #siparis-formu-container { display: block !important; padding-top: 0; }
+      .form-group input { border: none; border-bottom: 1px solid #000; border-radius: 0; height: 18px; }
+      .form-input-cell { border-bottom: 1px solid #000; height: 18px; }
       #siparisTable th { background: #ddd !important; color: #000 !important; border-color: #000; -webkit-print-color-adjust: exact; }
-      #siparisTable td { border-color: #000; }
+      #siparisTable td { border-color: #000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       #odemeTable th { -webkit-print-color-adjust: exact; }
       #odemeTable .header-dark { background: #ddd !important; color: #000 !important; }
-      .ozel-not-kutusu { border: none !important; color: #000; resize: none; overflow: hidden; }
+      .ozel-not-kutusu { border: none !important; color: #000; resize: none; overflow: hidden; min-height: 20px; padding: 0;}
       .ozel-not-kutusu::placeholder { color: transparent; }
     }
   </style>
@@ -124,7 +126,7 @@
 
   <div class="form-grid">
     <div>
-      <div style="background:#f1f3f5; padding:5px; font-weight:bold; margin-bottom:10px; text-align:center;">MÜŞTERİ BİLGİLERİ</div>
+      <div style="background:#f1f3f5; padding:4px; font-weight:bold; margin-bottom:8px; text-align:center; font-size:12px;">MÜŞTERİ BİLGİLERİ</div>
       <div class="form-group"><label>Adı-Soyadı:</label><input type="text"></div>
       <div class="form-group"><label>1. İletişim Numarası:</label><input type="text"></div>
       <div class="form-group"><label>2. İletişim Numarası:</label><input type="text"></div>
@@ -133,14 +135,14 @@
       <div class="form-group"><label>Teslim Alacak Kişi:</label><input type="text"></div>
     </div>
     <div>
-      <div style="background:#f1f3f5; padding:5px; font-weight:bold; margin-bottom:10px; text-align:center;">FATURA VE TESLİMAT BİLGİLERİ</div>
+      <div style="background:#f1f3f5; padding:4px; font-weight:bold; margin-bottom:8px; text-align:center; font-size:12px;">FATURA VE TESLİMAT BİLGİLERİ</div>
       <div class="form-group"><label>Sözleşme Tarihi:</label><input type="date"></div>
       
       <div class="form-group">
         <label>Sevk/Montaj Tarihi:</label>
         <input type="date" id="sevkTarihiInp" style="flex-grow: 1;">
         <label style="width: auto; margin-left: 10px; display: flex; align-items: center; cursor: pointer;" class="no-print">
-          <input type="checkbox" style="flex-grow: 0; margin-right: 5px;" onchange="let el=document.getElementById('sevkTarihiInp'); if(this.checked){el.type='text'; el.value='İLERİ TESLİM, SONRA BİLDİRİLECEK'; el.style.fontSize='10px'; el.style.fontWeight='bold';} else {el.type='date'; el.value=''; el.style.fontSize='13px'; el.style.fontWeight='normal';}"> İleri Teslim
+          <input type="checkbox" style="flex-grow: 0; margin-right: 5px;" onchange="let el=document.getElementById('sevkTarihiInp'); if(this.checked){el.type='text'; el.value='İLERİ TESLİM, SONRA BİLDİRİLECEK'; el.style.fontSize='10px'; el.style.fontWeight='bold';} else {el.type='date'; el.value=''; el.style.fontSize='12px'; el.style.fontWeight='normal';}"> İleri Teslim
         </label>
       </div>
 
@@ -154,12 +156,12 @@
   <table id="siparisTable">
     <thead>
       <tr>
-        <th style="width:40px;">SIRA</th>
-        <th style="width:80px;">MARKA</th>
-        <th style="width:120px;">ÜRÜN KODU</th>
+        <th style="width:30px;">SIRA</th>
+        <th style="width:70px;">MARKA</th>
+        <th style="width:110px;">ÜRÜN KODU</th>
         <th>AÇIKLAMA</th>
-        <th style="width:50px;">ADET</th>
-        <th style="width:100px;">FİYAT</th>
+        <th style="width:40px;">ADET</th>
+        <th style="width:90px;">FİYAT</th>
       </tr>
     </thead>
     <tbody id="siparis-urunler-tbody">
@@ -172,10 +174,10 @@
         <th colspan="4" class="header-dark">TAHSİLATLAR ( MÜŞTERİ ÖDEMELERİ )</th>
       </tr>
       <tr>
-        <th style="width:30px;">NO</th>
-        <th style="width:100px;">TARİH</th>
+        <th style="width:25px;">NO</th>
+        <th style="width:90px;">TARİH</th>
         <th>ÖDEME ŞEKLİ</th>
-        <th style="width:120px;">ÖDENEN TUTAR</th>
+        <th style="width:110px;">ÖDENEN TUTAR</th>
       </tr>
     </thead>
     <tbody>
@@ -205,7 +207,7 @@
       </tr>
       <tr>
         <td colspan="3" style="text-align:right; font-weight:bold; padding-right:15px; background:#f1f3f5;">KALAN BAKİYE :</td>
-        <td><input type="text" class="form-input-cell" placeholder="TL" style="color:red; font-size:14px;" onfocus="this.value = this.value.replace(/[^0-9]/g, '')" onblur="let v = this.value.replace(/[^0-9]/g, ''); if(v) this.value = parseInt(v).toLocaleString('tr-TR') + ' ₺';"></td>
+        <td><input type="text" class="form-input-cell" placeholder="TL" style="color:red; font-size:13px;" onfocus="this.value = this.value.replace(/[^0-9]/g, '')" onblur="let v = this.value.replace(/[^0-9]/g, ''); if(v) this.value = parseInt(v).toLocaleString('tr-TR') + ' ₺';"></td>
       </tr>
     </tbody>
   </table>
@@ -627,8 +629,7 @@ function updateSiparisFormu() {
       <td>${index + 1}</td>
       <td style="font-weight:bold;">${brand}</td>
       <td style="font-weight:bold;">${code}</td>
-      <td>${desc}</td>
-      <td><input type="number" class="form-input-cell" value="1" style="text-align:center;"></td>
+      <td title="${desc}">${desc}</td> <td><input type="number" class="form-input-cell" value="1" style="text-align:center;"></td>
       <td><input type="text" class="form-input-cell" placeholder="TL" onfocus="this.value = this.value.replace(/[^0-9]/g, '')" onblur="let v = this.value.replace(/[^0-9]/g, ''); if(v) this.value = parseInt(v).toLocaleString('tr-TR') + ' ₺';"></td>
     `;
     tbody.appendChild(tr);
@@ -638,7 +639,7 @@ function updateSiparisFormu() {
   for(let i = cart.length; i < Math.max(5, cart.length + 2); i++) {
     let tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="height:25px;">${i + 1}</td>
+      <td style="height:20px;">${i + 1}</td>
       <td></td><td></td><td></td><td></td><td></td>
     `;
     tbody.appendChild(tr);
