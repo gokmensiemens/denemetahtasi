@@ -42,12 +42,10 @@
     .p-link { color: #007bff !important; text-decoration: underline !important; font-weight: bold; cursor: pointer; display: block; white-space: normal; }
     .t-online-col { background: #eceff1; color: #455a64; font-weight: bold; }
 
-    /* Number Input Oklarını Gizleme */
     input[type=number]::-webkit-inner-spin-button, 
     input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     input[type=number] { -moz-appearance: textfield; }
 
-    /* SİPARİŞ FORMU STİLLERİ */
     .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .form-header img { height: 40px; object-fit: contain; }
     .form-header h2 { margin: 0; color: #333; font-size: 22px; text-align: center; flex-grow: 1; }
@@ -56,16 +54,13 @@
     .form-group label { width: 140px; font-weight: bold; font-size: 12px; }
     .form-group input { flex-grow: 1; padding: 2px 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; height: 20px;}
     
-    /* GÜNCELLENEN TABLO STİLLERİ */
     #siparisTable { table-layout: fixed; width: 100%; margin-bottom: 5px;}
     #siparisTable th { background: #444; color: white; height: 22px; font-size: 11px; padding: 2px; }
     #siparisTable td { font-size: 11px; padding: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     
-    /* Input ve Select Hücreleri */
     .form-input-cell { width: 100%; box-sizing: border-box; border: none; border-bottom: 1px solid #ccc; padding: 2px; text-align: center; background: transparent; font-weight: bold; font-size: 11px; height: 20px;}
     select.form-input-cell { appearance: auto; cursor: pointer; padding: 0; font-size: 10px; }
 
-    /* ÖDEME TABLOSU STİLLERİ */
     #odemeTable { width: 100%; margin-top: 5px; margin-bottom: 5px; border-collapse: collapse; table-layout: fixed; }
     #odemeTable th, #odemeTable td { border: 1px solid #ccc; font-size: 11px; padding: 2px; height: 20px;}
     #odemeTable th { background: #f1f3f5; color: #333; font-weight: bold; }
@@ -86,7 +81,6 @@
     .excel-btn { background: #007bff; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: background 0.3s; }
     .excel-btn:hover { background: #0056b3; }
 
-    /* YAZDIRMA AYARLARI */
     @media print {
       @page { size: A4 portrait; margin: 5mm; } 
       body { background: white; padding: 0; }
@@ -191,7 +185,7 @@
         <th style="width:25px;">NO</th>
         <th style="width:90px;">TARİH</th>
         <th style="width:90px;">ÖDEME TÜRÜ</th>
-        <th style="width:110px;">BANKA / KASA</th>
+        <th style="width:110px;">BANKA</th>
         <th style="width:80px;">KART TİPİ</th>
         <th style="width:80px;">TAKSİT</th>
         <th style="width:90px;">ÖDENEN TUTAR</th>
@@ -203,22 +197,56 @@
         <td><input type="date" class="form-input-cell" style="font-weight:normal;"></td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="NAKİT">NAKİT</option><option value="KREDİ KARTI">KREDİ KARTI</option><option value="HAVALE/EFT">HAVALE/EFT</option>
+            <option value=""></option>
+            <option value="NAKİT">NAKİT</option>
+            <option value="K.KARTI">K.KARTI</option>
+            <option value="HAVALE">HAVALE</option>
+            <option value="SİPARİŞ İPTALİ">SİPARİŞ İPTALİ</option>
+            <option value="KAPORA">KAPORA</option>
+            <option value="AÇIK HESAP">AÇIK HESAP</option>
+            <option value="DİĞER">DİĞER</option>
           </select>
         </td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="MERKEZ KASA">MERKEZ KASA</option><option value="GARANTİ">GARANTİ</option><option value="YAPI KREDİ">YAPI KREDİ</option><option value="İŞ BANKASI">İŞ BANKASI</option><option value="AKBANK">AKBANK</option><option value="ZİRAAT">ZİRAAT</option><option value="HALKBANK">HALKBANK</option><option value="VAKIFBANK">VAKIFBANK</option><option value="FİNANSBANK">FİNANSBANK</option><option value="DENİZBANK">DENİZBANK</option><option value="TEB">TEB</option><option value="KUVEYT TÜRK">KUVEYT TÜRK</option><option value="ENPARA">ENPARA</option>
+            <option value=""></option>
+            <option value="MERKEZ KASA">MERKEZ KASA</option>
+            <option value="AKBANK">AKBANK</option>
+            <option value="DENİZBANK">DENİZBANK</option>
+            <option value="FİNANSBANK">FİNANSBANK</option>
+            <option value="GARANTİ BBVA">GARANTİ BBVA</option>
+            <option value="HALKBANK">HALKBANK</option>
+            <option value="İŞ BANKASI">İŞ BANKASI</option>
+            <option value="KUVEYT TÜRK">KUVEYT TÜRK</option>
+            <option value="QNB FİNANS">QNB FİNANS</option>
+            <option value="TEB">TEB</option>
+            <option value="VAKIFBANK">VAKIFBANK</option>
+            <option value="YAPI KREDİ">YAPI KREDİ</option>
+            <option value="ZİRAAT">ZİRAAT</option>
+            <option value="DİĞER">DİĞER</option>
           </select>
         </td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="VİSA">VİSA</option><option value="MASTERCARD">MASTERCARD</option><option value="TROY">TROY</option><option value="AMEX">AMEX</option><option value="-">-</option>
+            <option value=""></option>
+            <option value="VİSA">VİSA</option>
+            <option value="MASTERCARD">MASTERCARD</option>
+            <option value="TROY">TROY</option>
+            <option value="AMEX">AMEX</option>
           </select>
         </td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="TEK ÇEKİM">TEK ÇEKİM</option><option value="2 TAKSİT">2 TAKSİT</option><option value="3 TAKSİT">3 TAKSİT</option><option value="4 TAKSİT">4 TAKSİT</option><option value="5 TAKSİT">5 TAKSİT</option><option value="6 TAKSİT">6 TAKSİT</option><option value="7 TAKSİT">7 TAKSİT</option><option value="8 TAKSİT">8 TAKSİT</option><option value="9 TAKSİT">9 TAKSİT</option><option value="10 TAKSİT">10 TAKSİT</option><option value="11 TAKSİT">11 TAKSİT</option><option value="12 TAKSİT">12 TAKSİT</option><option value="-">-</option>
+            <option value=""></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
           </select>
         </td>
         <td><input type="text" class="form-input-cell odeme-inp" placeholder="TL" onfocus="this.value = this.value.replace(/[^0-9]/g, '')" onblur="let v = this.value.replace(/[^0-9]/g, ''); if(v) { this.value = parseInt(v).toLocaleString('tr-TR') + ' ₺'; } else { this.value = ''; } hesaplaBakiye();"></td>
@@ -228,22 +256,56 @@
         <td><input type="date" class="form-input-cell" style="font-weight:normal;"></td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="NAKİT">NAKİT</option><option value="KREDİ KARTI">KREDİ KARTI</option><option value="HAVALE/EFT">HAVALE/EFT</option>
+            <option value=""></option>
+            <option value="NAKİT">NAKİT</option>
+            <option value="K.KARTI">K.KARTI</option>
+            <option value="HAVALE">HAVALE</option>
+            <option value="SİPARİŞ İPTALİ">SİPARİŞ İPTALİ</option>
+            <option value="KAPORA">KAPORA</option>
+            <option value="AÇIK HESAP">AÇIK HESAP</option>
+            <option value="DİĞER">DİĞER</option>
           </select>
         </td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="MERKEZ KASA">MERKEZ KASA</option><option value="GARANTİ">GARANTİ</option><option value="YAPI KREDİ">YAPI KREDİ</option><option value="İŞ BANKASI">İŞ BANKASI</option><option value="AKBANK">AKBANK</option><option value="ZİRAAT">ZİRAAT</option><option value="HALKBANK">HALKBANK</option><option value="VAKIFBANK">VAKIFBANK</option><option value="FİNANSBANK">FİNANSBANK</option><option value="DENİZBANK">DENİZBANK</option><option value="TEB">TEB</option><option value="KUVEYT TÜRK">KUVEYT TÜRK</option><option value="ENPARA">ENPARA</option>
+            <option value=""></option>
+            <option value="MERKEZ KASA">MERKEZ KASA</option>
+            <option value="AKBANK">AKBANK</option>
+            <option value="DENİZBANK">DENİZBANK</option>
+            <option value="FİNANSBANK">FİNANSBANK</option>
+            <option value="GARANTİ BBVA">GARANTİ BBVA</option>
+            <option value="HALKBANK">HALKBANK</option>
+            <option value="İŞ BANKASI">İŞ BANKASI</option>
+            <option value="KUVEYT TÜRK">KUVEYT TÜRK</option>
+            <option value="QNB FİNANS">QNB FİNANS</option>
+            <option value="TEB">TEB</option>
+            <option value="VAKIFBANK">VAKIFBANK</option>
+            <option value="YAPI KREDİ">YAPI KREDİ</option>
+            <option value="ZİRAAT">ZİRAAT</option>
+            <option value="DİĞER">DİĞER</option>
           </select>
         </td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="VİSA">VİSA</option><option value="MASTERCARD">MASTERCARD</option><option value="TROY">TROY</option><option value="AMEX">AMEX</option><option value="-">-</option>
+            <option value=""></option>
+            <option value="VİSA">VİSA</option>
+            <option value="MASTERCARD">MASTERCARD</option>
+            <option value="TROY">TROY</option>
+            <option value="AMEX">AMEX</option>
           </select>
         </td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="TEK ÇEKİM">TEK ÇEKİM</option><option value="2 TAKSİT">2 TAKSİT</option><option value="3 TAKSİT">3 TAKSİT</option><option value="4 TAKSİT">4 TAKSİT</option><option value="5 TAKSİT">5 TAKSİT</option><option value="6 TAKSİT">6 TAKSİT</option><option value="7 TAKSİT">7 TAKSİT</option><option value="8 TAKSİT">8 TAKSİT</option><option value="9 TAKSİT">9 TAKSİT</option><option value="10 TAKSİT">10 TAKSİT</option><option value="11 TAKSİT">11 TAKSİT</option><option value="12 TAKSİT">12 TAKSİT</option><option value="-">-</option>
+            <option value=""></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
           </select>
         </td>
         <td><input type="text" class="form-input-cell odeme-inp" placeholder="TL" onfocus="this.value = this.value.replace(/[^0-9]/g, '')" onblur="let v = this.value.replace(/[^0-9]/g, ''); if(v) { this.value = parseInt(v).toLocaleString('tr-TR') + ' ₺'; } else { this.value = ''; } hesaplaBakiye();"></td>
@@ -253,22 +315,56 @@
         <td><input type="date" class="form-input-cell" style="font-weight:normal;"></td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="NAKİT">NAKİT</option><option value="KREDİ KARTI">KREDİ KARTI</option><option value="HAVALE/EFT">HAVALE/EFT</option>
+            <option value=""></option>
+            <option value="NAKİT">NAKİT</option>
+            <option value="K.KARTI">K.KARTI</option>
+            <option value="HAVALE">HAVALE</option>
+            <option value="SİPARİŞ İPTALİ">SİPARİŞ İPTALİ</option>
+            <option value="KAPORA">KAPORA</option>
+            <option value="AÇIK HESAP">AÇIK HESAP</option>
+            <option value="DİĞER">DİĞER</option>
           </select>
         </td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="MERKEZ KASA">MERKEZ KASA</option><option value="GARANTİ">GARANTİ</option><option value="YAPI KREDİ">YAPI KREDİ</option><option value="İŞ BANKASI">İŞ BANKASI</option><option value="AKBANK">AKBANK</option><option value="ZİRAAT">ZİRAAT</option><option value="HALKBANK">HALKBANK</option><option value="VAKIFBANK">VAKIFBANK</option><option value="FİNANSBANK">FİNANSBANK</option><option value="DENİZBANK">DENİZBANK</option><option value="TEB">TEB</option><option value="KUVEYT TÜRK">KUVEYT TÜRK</option><option value="ENPARA">ENPARA</option>
+            <option value=""></option>
+            <option value="MERKEZ KASA">MERKEZ KASA</option>
+            <option value="AKBANK">AKBANK</option>
+            <option value="DENİZBANK">DENİZBANK</option>
+            <option value="FİNANSBANK">FİNANSBANK</option>
+            <option value="GARANTİ BBVA">GARANTİ BBVA</option>
+            <option value="HALKBANK">HALKBANK</option>
+            <option value="İŞ BANKASI">İŞ BANKASI</option>
+            <option value="KUVEYT TÜRK">KUVEYT TÜRK</option>
+            <option value="QNB FİNANS">QNB FİNANS</option>
+            <option value="TEB">TEB</option>
+            <option value="VAKIFBANK">VAKIFBANK</option>
+            <option value="YAPI KREDİ">YAPI KREDİ</option>
+            <option value="ZİRAAT">ZİRAAT</option>
+            <option value="DİĞER">DİĞER</option>
           </select>
         </td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="VİSA">VİSA</option><option value="MASTERCARD">MASTERCARD</option><option value="TROY">TROY</option><option value="AMEX">AMEX</option><option value="-">-</option>
+            <option value=""></option>
+            <option value="VİSA">VİSA</option>
+            <option value="MASTERCARD">MASTERCARD</option>
+            <option value="TROY">TROY</option>
+            <option value="AMEX">AMEX</option>
           </select>
         </td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="TEK ÇEKİM">TEK ÇEKİM</option><option value="2 TAKSİT">2 TAKSİT</option><option value="3 TAKSİT">3 TAKSİT</option><option value="4 TAKSİT">4 TAKSİT</option><option value="5 TAKSİT">5 TAKSİT</option><option value="6 TAKSİT">6 TAKSİT</option><option value="7 TAKSİT">7 TAKSİT</option><option value="8 TAKSİT">8 TAKSİT</option><option value="9 TAKSİT">9 TAKSİT</option><option value="10 TAKSİT">10 TAKSİT</option><option value="11 TAKSİT">11 TAKSİT</option><option value="12 TAKSİT">12 TAKSİT</option><option value="-">-</option>
+            <option value=""></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
           </select>
         </td>
         <td><input type="text" class="form-input-cell odeme-inp" placeholder="TL" onfocus="this.value = this.value.replace(/[^0-9]/g, '')" onblur="let v = this.value.replace(/[^0-9]/g, ''); if(v) { this.value = parseInt(v).toLocaleString('tr-TR') + ' ₺'; } else { this.value = ''; } hesaplaBakiye();"></td>
@@ -278,22 +374,56 @@
         <td><input type="date" class="form-input-cell" style="font-weight:normal;"></td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="NAKİT">NAKİT</option><option value="KREDİ KARTI">KREDİ KARTI</option><option value="HAVALE/EFT">HAVALE/EFT</option>
+            <option value=""></option>
+            <option value="NAKİT">NAKİT</option>
+            <option value="K.KARTI">K.KARTI</option>
+            <option value="HAVALE">HAVALE</option>
+            <option value="SİPARİŞ İPTALİ">SİPARİŞ İPTALİ</option>
+            <option value="KAPORA">KAPORA</option>
+            <option value="AÇIK HESAP">AÇIK HESAP</option>
+            <option value="DİĞER">DİĞER</option>
           </select>
         </td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="MERKEZ KASA">MERKEZ KASA</option><option value="GARANTİ">GARANTİ</option><option value="YAPI KREDİ">YAPI KREDİ</option><option value="İŞ BANKASI">İŞ BANKASI</option><option value="AKBANK">AKBANK</option><option value="ZİRAAT">ZİRAAT</option><option value="HALKBANK">HALKBANK</option><option value="VAKIFBANK">VAKIFBANK</option><option value="FİNANSBANK">FİNANSBANK</option><option value="DENİZBANK">DENİZBANK</option><option value="TEB">TEB</option><option value="KUVEYT TÜRK">KUVEYT TÜRK</option><option value="ENPARA">ENPARA</option>
+            <option value=""></option>
+            <option value="MERKEZ KASA">MERKEZ KASA</option>
+            <option value="AKBANK">AKBANK</option>
+            <option value="DENİZBANK">DENİZBANK</option>
+            <option value="FİNANSBANK">FİNANSBANK</option>
+            <option value="GARANTİ BBVA">GARANTİ BBVA</option>
+            <option value="HALKBANK">HALKBANK</option>
+            <option value="İŞ BANKASI">İŞ BANKASI</option>
+            <option value="KUVEYT TÜRK">KUVEYT TÜRK</option>
+            <option value="QNB FİNANS">QNB FİNANS</option>
+            <option value="TEB">TEB</option>
+            <option value="VAKIFBANK">VAKIFBANK</option>
+            <option value="YAPI KREDİ">YAPI KREDİ</option>
+            <option value="ZİRAAT">ZİRAAT</option>
+            <option value="DİĞER">DİĞER</option>
           </select>
         </td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="VİSA">VİSA</option><option value="MASTERCARD">MASTERCARD</option><option value="TROY">TROY</option><option value="AMEX">AMEX</option><option value="-">-</option>
+            <option value=""></option>
+            <option value="VİSA">VİSA</option>
+            <option value="MASTERCARD">MASTERCARD</option>
+            <option value="TROY">TROY</option>
+            <option value="AMEX">AMEX</option>
           </select>
         </td>
         <td>
           <select class="form-input-cell">
-            <option value="">Seçiniz</option><option value="TEK ÇEKİM">TEK ÇEKİM</option><option value="2 TAKSİT">2 TAKSİT</option><option value="3 TAKSİT">3 TAKSİT</option><option value="4 TAKSİT">4 TAKSİT</option><option value="5 TAKSİT">5 TAKSİT</option><option value="6 TAKSİT">6 TAKSİT</option><option value="7 TAKSİT">7 TAKSİT</option><option value="8 TAKSİT">8 TAKSİT</option><option value="9 TAKSİT">9 TAKSİT</option><option value="10 TAKSİT">10 TAKSİT</option><option value="11 TAKSİT">11 TAKSİT</option><option value="12 TAKSİT">12 TAKSİT</option><option value="-">-</option>
+            <option value=""></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
           </select>
         </td>
         <td><input type="text" class="form-input-cell odeme-inp" placeholder="TL" onfocus="this.value = this.value.replace(/[^0-9]/g, '')" onblur="let v = this.value.replace(/[^0-9]/g, ''); if(v) { this.value = parseInt(v).toLocaleString('tr-TR') + ' ₺'; } else { this.value = ''; } hesaplaBakiye();"></td>
@@ -385,20 +515,17 @@ function hesaplaBakiye() {
     document.getElementById('kalanBakiyeInp').value = kalan.toLocaleString('tr-TR') + ' ₺';
 }
 
-// YENİLENEN EXCEL'E AKTARMA FONKSİYONU (Dosya İsimlendirme Güncellendi)
 function exportToExcel() {
     let inputs = document.querySelectorAll('.form-group input');
     
-    // Müşteri adını ve sözleşme tarihini alalım
     let musteriAd = document.getElementById('excel_musteri_ad').value.trim() || "Siparis_Formu";
-    let tarihInput = document.getElementById('excel_sozlesme_tarihi').value; // YYYY-MM-DD formatında gelir
+    let tarihInput = document.getElementById('excel_sozlesme_tarihi').value; 
     let formatliTarih = "";
 
     if (tarihInput) {
         let parcalar = tarihInput.split('-');
-        formatliTarih = parcalar[2] + "." + parcalar[1] + "." + parcalar[0]; // DD.MM.YYYY formatına çeviriyoruz
+        formatliTarih = parcalar[2] + "." + parcalar[1] + "." + parcalar[0]; 
     } else {
-        // Eğer tarih seçilmemişse bugünün tarihini atayalım
         let d = new Date();
         formatliTarih = String(d.getDate()).padStart(2, '0') + "." + String(d.getMonth() + 1).padStart(2, '0') + "." + d.getFullYear();
     }
@@ -438,7 +565,7 @@ function exportToExcel() {
     ws_data.push([]);
 
     ws_data.push(["TAHSİLATLAR ( MÜŞTERİ ÖDEMELERİ )"]);
-    ws_data.push(["NO", "TARİH", "ÖDEME TÜRÜ", "BANKA / KASA", "KART TİPİ", "TAKSİT", "ÖDENEN TUTAR"]);
+    ws_data.push(["NO", "TARİH", "ÖDEME TÜRÜ", "BANKA", "KART TİPİ", "TAKSİT", "ÖDENEN TUTAR"]);
     
     let odemeRows = document.querySelectorAll('#odemeTable tbody tr');
     for(let i=0; i<4; i++) {
@@ -473,10 +600,7 @@ function exportToExcel() {
     var ws = XLSX.utils.aoa_to_sheet(ws_data);
     XLSX.utils.book_append_sheet(wb, ws, "Siparis_Formu");
     
-    // Windows ve web ortamında geçersiz olan karakterleri / \ ? % * : | " < > temizleyelim
     let safeName = musteriAd.replace(/[/\\?%*:|"<>]/g, ""); 
-    
-    // İstediğiniz Formatta Dosya Adı Oluşturma: Ahmet Yılmaz - 27.03.2026.xlsx
     let fileName = safeName + " - " + formatliTarih + ".xlsx";
     XLSX.writeFile(wb, fileName);
 }
@@ -818,7 +942,6 @@ function renderHeader() {
     "<tr>" + heads.map(h => `<th>${h.split(' ').join('<br>')}</th>`).join('') + "</tr>";
 }
 
-// YENİ EKLENEN SİPARİŞ FORMU GÜNCELLEME FONKSİYONU
 function updateSiparisFormu() {
   const tbody = document.getElementById('siparis-urunler-tbody');
   tbody.innerHTML = '';
@@ -831,7 +954,6 @@ function updateSiparisFormu() {
     let code = item[heads[0]] || '';
     let desc = item[heads[1]] || '';
     
-    // Markayı açıklamadan tahmin etme, varsayılan SIEMENS
     let brand = "SIEMENS";
     if(desc.toLowerCase().includes("bosch")) brand = "BOSCH";
     else if(desc.toLowerCase().includes("profilo")) brand = "PROFİLO";
@@ -848,7 +970,6 @@ function updateSiparisFormu() {
     tbody.appendChild(tr);
   });
   
-  // Harici olarak elle ürün ekleyebilmek için inputlu boş satırlar
   for(let i = cart.length; i < Math.max(5, cart.length + 2); i++) {
     let tr = document.createElement('tr');
     tr.innerHTML = `
