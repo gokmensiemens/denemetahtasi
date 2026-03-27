@@ -129,7 +129,7 @@
 
   <div class="form-grid">
     <div>
-      <div style="background:#f1f3f5; padding:4px; font-weight:bold; margin-bottom:8px; text-align:center; font-size:12px;">MÜŞTERİ BİLGİLERİ</div>
+      <div style="background:#f1f3f5; padding:4px; font-weight:bold; margin-bottom:8px; text-align:center; font-size:12px;">MÜŞTERİ VE SEVK BİLGİLERİ</div>
       <div class="form-group"><label>Adı-Soyadı:</label><input type="text" id="excel_musteri_ad"></div>
       <div class="form-group"><label>1. İletişim Numarası:</label><input type="text"></div>
       <div class="form-group"><label>2. İletişim Numarası:</label><input type="text"></div>
@@ -554,7 +554,7 @@ function exportToExcel() {
     let ws_data = [
       ["SİPARİŞ FORMU & SATIŞ SÖZLEŞMESİ"],
       [],
-      ["MÜŞTERİ Ve TESLİMAT BİLGİLERİ", "", "", "FATURA BİLGİLERİ"],
+      ["MÜŞTERİ ve SEVK BİLGİLERİ", "", "", "FATURA ve TESLİMAT BİLGİLERİ"],
       ["Adı-Soyadı:", inputs[0].value, "", "Sözleşme Tarihi:", formatliTarih],
       ["1. İletişim Numarası:", inputs[1].value, "", "Sevk/Montaj Tarihi:", inputs[7].value],
       ["2. İletişim Numarası:", inputs[2].value, "", "Fatura Ünvanı:", inputs[9].value],
