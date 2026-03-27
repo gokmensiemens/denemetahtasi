@@ -53,10 +53,14 @@
     
     #siparisTable th { background: #444; height: 30px; font-size: 12px; }
     #siparisTable td { font-size: 12px; padding: 4px; white-space: normal; word-wrap: break-word; }
-    .form-input-cell { width: 100%; box-sizing: border-box; border: none; border-bottom: 1px solid #ccc; padding: 2px; text-align: center; background: transparent; }
+    .form-input-cell { width: 100%; box-sizing: border-box; border: none; border-bottom: 1px solid #ccc; padding: 2px; text-align: center; background: transparent; font-weight: bold;}
     
     .kurallar { font-size: 10px; text-align: left; margin-top: 15px; line-height: 1.4; border: 1px solid #ccc; padding: 10px; background: #fafafa; }
     .kurallar p { margin: 4px 0; }
+    
+    /* YENİ EKLENEN NOT KUTUSU */
+    .ozel-not-kutusu { width: 100%; box-sizing: border-box; margin: 10px 0; padding: 8px; border: 2px dashed #dc3545; border-radius: 4px; color: red; font-weight: bold; font-size: 12px; font-family: inherit; resize: vertical; min-height: 40px; }
+    .ozel-not-kutusu::placeholder { color: red; opacity: 0.7; }
     
     .imza-alani { display: flex; justify-content: space-between; margin-top: 30px; padding: 0 20px; }
     .imza-kutu { text-align: center; font-weight: bold; font-size: 13px; }
@@ -75,6 +79,8 @@
       .form-input-cell { border-bottom: 1px solid #000; }
       #siparisTable th { background: #ddd !important; color: #000 !important; border-color: #000; -webkit-print-color-adjust: exact; }
       #siparisTable td { border-color: #000; }
+      .ozel-not-kutusu { border: none !important; color: #000; resize: none; overflow: hidden; }
+      .ozel-not-kutusu::placeholder { color: transparent; }
     }
   </style>
 </head>
@@ -107,11 +113,11 @@
     <div>
       <div style="background:#f1f3f5; padding:5px; font-weight:bold; margin-bottom:10px; text-align:center;">MÜŞTERİ BİLGİLERİ</div>
       <div class="form-group"><label>Adı-Soyadı:</label><input type="text"></div>
-      <div class="form-group"><label>Tel. Cep:</label><input type="text"></div>
-      <div class="form-group"><label>Tel. İş:</label><input type="text"></div>
+      <div class="form-group"><label>1. İletişim Numarası:</label><input type="text"></div>
+      <div class="form-group"><label>2. İletişim Numarası:</label><input type="text"></div>
       <div class="form-group"><label>e-mail:</label><input type="text"></div>
       <div class="form-group"><label>Sevk Adresi:</label><input type="text"></div>
-      <div class="form-group"><label>Teslim Alacak Kişi:</label><input type="text"></div>
+      <div class="form-group"><label>Evde Olunamayacaksa Teslim Alacak Kişi:</label><input type="text"></div>
     </div>
     <div>
       <div style="background:#f1f3f5; padding:5px; font-weight:bold; margin-bottom:10px; text-align:center;">FATURA VE TESLİMAT BİLGİLERİ</div>
@@ -121,14 +127,14 @@
         <label>Sevk/Montaj Tarihi:</label>
         <input type="date" id="sevkTarihiInp" style="flex-grow: 1;">
         <label style="width: auto; margin-left: 10px; display: flex; align-items: center; cursor: pointer;" class="no-print">
-          <input type="checkbox" style="flex-grow: 0; margin-right: 5px;" onchange="let el=document.getElementById('sevkTarihiInp'); if(this.checked){el.type='text'; el.value='İLERİ TESLİM, DAHA SONRA BİLDİRİLECEK'; el.style.fontSize='10px'; el.style.fontWeight='bold';} else {el.type='date'; el.value=''; el.style.fontSize='13px'; el.style.fontWeight='normal';}"> İleri Teslim
+          <input type="checkbox" style="flex-grow: 0; margin-right: 5px;" onchange="let el=document.getElementById('sevkTarihiInp'); if(this.checked){el.type='text'; el.value='İLERİ TESLİM, SONRA BİLDİRİLECEK'; el.style.fontSize='10px'; el.style.fontWeight='bold';} else {el.type='date'; el.value=''; el.style.fontSize='13px'; el.style.fontWeight='normal';}"> İleri Teslim
         </label>
       </div>
 
       <div class="form-group"><label>Fatura Ünvan/İsim:</label><input type="text"></div>
       <div class="form-group"><label>Fatura Adresi:</label><input type="text"></div>
-      <div class="form-group"><label>Vergi Dairesi / No:</label><input type="text" style="width:48%; margin-right:4%;"><input type="text" style="width:48%;"></div>
-      <div class="form-group"><label>TC Kimlik No:</label><input type="text"></div>
+      <div class="form-group"><label>Vergi Dairesi:</label><input type="text" style="width:48%; margin-right:4%;"><input type="text" style="width:48%;"></div>
+      <div class="form-group"><label>TC Kimlik No/Vergi No:</label><input type="text"></div>
     </div>
   </div>
 
@@ -138,11 +144,9 @@
         <th style="width:40px;">SIRA</th>
         <th style="width:80px;">MARKA</th>
         <th style="width:120px;">ÜRÜN KODU</th>
-        <th>AÇIKLAMA / ÖZELLİK</th>
-        <th style="width:80px;">BR. FİYAT</th>
+        <th>AÇIKLAMA</th>
         <th style="width:50px;">ADET</th>
-        <th style="width:90px;">LİSTE TUTAR</th>
-        <th style="width:90px;">İND. FİYAT</th>
+        <th style="width:100px;">FİYAT</th>
       </tr>
     </thead>
     <tbody id="siparis-urunler-tbody">
@@ -151,6 +155,9 @@
 
   <div class="kurallar">
     <b>ÖNEMLİ AÇIKLAMALAR VE GENEL KURALLAR:</b>
+    
+    <textarea class="ozel-not-kutusu" rows="2" placeholder="ÖNEMLİ AÇIKLAMALARINIZI BURAYA YAZINIZ"></textarea>
+
     <p>1. KAPORALI SATIŞLAR 7 İŞ GÜNÜ İÇİNDE TAMAMLANMALIDIR, AKSİ DURUMDA SİPARİŞ & SATIŞ FORMU GEÇERSİZ OLACAKTIR.</p>
     <p>2. MÜŞTERİ ÜRÜNLERİ MAĞAZADA GÖRÜP, BEĞENİP ÖZELLİKLERİNİ TAM OLARAK ANLAYIP SATIN ALMIŞTIR. ÜRÜN ÖLÇÜLERİ VE ÖZELLİKLERİ MÜŞTERİ TARAFINDAN ONAYLANMIŞTIR.</p>
     <p>3. MÜŞTERİ ÜRÜNÜ TESLİM ALIRKEN SAĞLAMLIĞINI KONTROL EDECEK VE ONDAN SONRA TESLİM FORMUNU İMZALAYACAKTIR. ÜRÜNÜN SAĞLAM ŞEKİLDE TESLİM ALINMASI MÜŞTERİ SORUMLULUĞUNDADIR / SAĞLAM OLARAK SEVK EDİLMEYEN ÜRÜNLER MÜŞTERİ TARAFINDAN TESLİM ALINMAYACAKTIR.</p>
@@ -547,7 +554,7 @@ function updateSiparisFormu() {
   tbody.innerHTML = '';
   
   if(cart.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:10px;">Henüz ürün eklenmedi.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:10px;">Henüz ürün eklenmedi.</td></tr>';
     return;
   }
 
@@ -560,17 +567,14 @@ function updateSiparisFormu() {
     if(desc.toLowerCase().includes("bosch")) brand = "BOSCH";
     else if(desc.toLowerCase().includes("profilo")) brand = "PROFİLO";
     
-    // Liste fiyatını havale/perakende gibi ilk fiyat sütunundan çekebiliriz (Manuel giriş için input bırakıyoruz)
     let tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${index + 1}</td>
       <td style="font-weight:bold;">${brand}</td>
       <td style="font-weight:bold;">${code}</td>
       <td>${desc}</td>
-      <td><input type="text" class="form-input-cell" placeholder="TL"></td>
       <td><input type="number" class="form-input-cell" value="1" style="text-align:center;"></td>
-      <td><input type="text" class="form-input-cell" placeholder="TL"></td>
-      <td><input type="text" class="form-input-cell" placeholder="TL"></td>
+      <td><input type="text" class="form-input-cell" placeholder="TL" onfocus="this.value = this.value.replace(/[^0-9]/g, '')" onblur="let v = this.value.replace(/[^0-9]/g, ''); if(v) this.value = parseInt(v).toLocaleString('tr-TR') + ' ₺';"></td>
     `;
     tbody.appendChild(tr);
   });
@@ -580,7 +584,7 @@ function updateSiparisFormu() {
     let tr = document.createElement('tr');
     tr.innerHTML = `
       <td style="height:25px;">${i + 1}</td>
-      <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+      <td></td><td></td><td></td><td></td><td></td>
     `;
     tbody.appendChild(tr);
   }
