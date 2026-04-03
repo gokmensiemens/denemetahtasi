@@ -50,8 +50,11 @@
     #siparisTable th, #siparisTable td { border: 1px solid #ccc; }
     #siparisTable th { background: #444; color: white; height: 22px; font-size: 11px; padding: 2px; }
     #siparisTable td { font-size: 11px; padding: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .marka-select { width: 100%; box-sizing: border-box; border: none; border-bottom: 1px solid #ccc; padding: 1px 2px; text-align: center; background: transparent; font-weight: bold; font-size: 11px; height: 20px; cursor: pointer; appearance: auto; }
-    .marka-select:focus { outline: none; border-bottom-color: #007bff; }
+    
+    /* Düzenlenen Kısım: Marka seçim kutusunun alt çizgileri kaldırıldı */
+    .marka-select { width: 100%; box-sizing: border-box; border: none; border-bottom: none; padding: 1px 2px; text-align: center; background: transparent; font-weight: bold; font-size: 11px; height: 20px; cursor: pointer; appearance: auto; }
+    .marka-select:focus { outline: none; }
+    
     .form-input-cell { width: 100%; box-sizing: border-box; border: none; padding: 2px; text-align: center; background: transparent; font-weight: bold; font-size: 11px; height: 20px; }
     select.form-input-cell { appearance: auto; cursor: pointer; padding: 0; font-size: 10px; }
     #odemeTable { width: 100%; margin-top: 5px; margin-bottom: 5px; border-collapse: collapse; table-layout: fixed; }
@@ -75,6 +78,7 @@
     .print-btn:hover { background: #218838; }
     .excel-btn { background: #007bff; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
     .excel-btn:hover { background: #0056b3; }
+    
     @media print {
       @page { size: A4 portrait; margin: 5mm; }
       body { background: white; padding: 0; }
@@ -84,7 +88,10 @@
       .form-group input { border: none; border-bottom: 1px solid #000; border-radius: 0; height: 18px; }
       .form-input-cell { height: 18px; }
       select.form-input-cell { -webkit-appearance: none; -moz-appearance: none; appearance: none; background: transparent; border: none !important; }
-      .marka-select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background: transparent; border: none; border-bottom: 1px solid #000 !important; }
+      
+      /* Düzenlenen Kısım: Yazdırma ekranında da çizgi çıkmaması için güncellendi */
+      .marka-select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background: transparent; border: none; border-bottom: none !important; }
+      
       #siparisTable th { background: #ddd !important; color: #000 !important; border-color: #000; -webkit-print-color-adjust: exact; }
       #siparisTable td { border-color: #000; }
       #odemeTable th { -webkit-print-color-adjust: exact; }
