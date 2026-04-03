@@ -29,17 +29,10 @@
     #mainTable th:nth-child(1), #mainTable td:nth-child(1) { width: 5.5vw; }
     #mainTable th:nth-child(2), #mainTable td:nth-child(2) { width: 11.5vw; }
     #mainTable th:nth-child(n+3):nth-child(-n+15), #mainTable td:nth-child(n+3):nth-child(-n+15) { width: 3.1vw; }
-    #mainTable th:nth-child(15), #mainTable td:nth-child(15) { white-space: normal !important; line-height: 1.2; }
     
-    .btn-del { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; margin-bottom: 5px; font-weight: bold; }
     .f-title { text-align: right; padding-right: 15px; background: #f1f3f5; font-weight: bold; font-size: 0.75vw; }
     .t-res { background: #e3f2fd; white-space: nowrap; }
     .t-final { background: #d4edda; color: #155724; font-size: 0.8vw; border: 2px solid #28a745 !important; font-weight: bold; white-space: nowrap; }
-    #manualBundInp { width: 100%; box-sizing: border-box; padding: 5px 2px; border: 2px solid #dc3545; border-radius: 4px; text-align: center; font-weight: bold; color: red; }
-    .p-link { color: #007bff !important; text-decoration: underline !important; font-weight: bold; cursor: pointer; display: block; white-space: normal; }
-    .t-online-col { background: #eceff1; color: #455a64; font-weight: bold; }
-    input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-    input[type=number] { -moz-appearance: textfield; }
     
     .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .form-header img { height: 40px; object-fit: contain; }
@@ -47,10 +40,6 @@
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
     .form-group { display: flex; align-items: center; margin-bottom: 3px; }
     .form-group label { width: 140px; font-weight: bold; font-size: 12px; flex-shrink: 0; }
-    
-    #siparis-formu-container input, #siparis-formu-container textarea, #siparis-formu-container select {
-      box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: clip;
-    }
     
     .form-group input { flex-grow: 1; padding: 2px 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 11px; height: 22px; width: 100%; }
     .form-group textarea { 
@@ -60,18 +49,17 @@
       word-break: break-word; overflow-wrap: anywhere;
     }
     
-    #f_adres, #f_fadres { height: 65px; }
-    /* 3 Satıra Çıkarılan Alanlar */
+    /* İSTEDİĞİN 3 SATIRLIK ALANLAR */
     #f_ad, #f_unvan { height: 52px; }
+    /* Adresler 4 satır kalmaya devam ediyor */
+    #f_adres, #f_fadres { height: 65px; }
     
     #siparisTable { table-layout: fixed; width: 100%; margin-bottom: 5px; border-collapse: collapse; }
     #siparisTable th, #siparisTable td { border: 1px solid #ccc; }
     #siparisTable th { background: #444; color: white; height: 22px; font-size: 11px; padding: 2px; }
     #siparisTable td { font-size: 11px; padding: 2px; white-space: nowrap; overflow: hidden; text-overflow: clip; }
     
-    .marka-select { width: 100%; border: none; padding: 1px 2px; text-align: center; background: transparent; font-weight: bold; font-size: 10px; height: 20px; cursor: pointer; appearance: auto; }
     .form-input-cell { width: 100%; border: none; padding: 2px; text-align: center; background: transparent; font-weight: bold; font-size: 11px; height: 20px; }
-    select.form-input-cell { appearance: auto; cursor: pointer; padding: 0; font-size: 10px; }
     
     #odemeTable { width: 100%; margin-top: 5px; margin-bottom: 5px; border-collapse: collapse; table-layout: fixed; }
     #odemeTable th, #odemeTable td { border: 1px solid #ccc; font-size: 11px; padding: 2px; height: 22px; }
@@ -79,89 +67,70 @@
     #odemeTable .header-dark { background: #444; color: white; font-size: 12px; }
     
     .kurallar { font-size: 9.5px; text-align: left; margin-top: 5px; line-height: 1.3; border: 1px solid #ccc; padding: 8px; background: #fafafa; clear: both; }
-    .kurallar p { margin: 3px 0; }
-    .ozel-not-kutusu { width: 100%; margin: 5px 0; padding: 6px; border: 2px dashed #dc3545; border-radius: 4px; color: red; font-weight: bold; font-size: 11px; font-family: inherit; resize: vertical; min-height: 35px; box-sizing: border-box; white-space: pre-wrap !important; word-break: break-word; overflow-wrap: anywhere;}
+    .ozel-not-kutusu { width: 100%; margin: 5px 0; padding: 6px; border: 2px dashed #dc3545; border-radius: 4px; color: red; font-weight: bold; font-size: 11px; font-family: inherit; resize: vertical; min-height: 35px; box-sizing: border-box; }
     .imza-alani { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 15px; padding: 0 10px; gap: 15px; }
-    .imza-kutu { text-align: center; font-weight: bold; font-size: 12px; flex: 1; display: flex; flex-direction: column; align-items: center; }
-    .imza-kutu-baslik { margin-bottom: 5px; font-size: 12px; font-weight: bold; }
-    .imza-alt { border-top: 1px solid #333; margin-top: 8px; padding-top: 5px; font-size: 10px; font-weight: normal; color: #555; width: 100%; text-align: center; }
-    .imza-textarea { border: 1px solid #bbb; border-radius: 4px; font-size: 12px; font-family: 'Segoe UI', Arial, sans-serif; font-weight: bold; text-align: center; padding: 5px 6px; resize: none; background: #fafafa; line-height: 1.6; display: block; overflow: hidden; box-sizing: border-box; white-space: pre-wrap !important; word-break: break-word; overflow-wrap: anywhere;}
-    .musteri-imza-bos { min-height: 52px; width: 100%; }
-    .btn-action-container { float: right; margin-top: 10px; display: flex; gap: 10px; }
-    .print-btn { background: #28a745; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-    .excel-btn { background: #007bff; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-    
+    .imza-kutu { text-align: center; font-weight: bold; font-size: 12px; flex: 1; }
+    .imza-textarea { border: 1px solid #bbb; border-radius: 4px; font-size: 12px; font-family: inherit; font-weight: bold; text-align: center; padding: 5px; resize: none; background: #fafafa; width: 100%; box-sizing: border-box; }
+
     @media print {
       @page { size: A4 portrait; margin: 5mm; }
-      body { background: white; padding: 0; zoom: 1 !important; }
+      body { background: white; padding: 0; }
       .no-print, .search-container, #mainTable, #statusMsg { display: none !important; }
       .card { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
-      #siparis-formu-container { display: block !important; padding-top: 0; }
-      .form-group input { border: 1px solid #000 !important; border-radius: 4px !important; height: 22px !important; background: transparent; }
-      .form-group textarea { border: 1px solid #000 !important; border-radius: 4px !important; background: transparent; }
-      #f_adres, #f_fadres { height: 65px !important; }
-      /* Yazdırma Modu 3 Satır Ayarı */
+      /* Yazdırma sırasında 3 satır yüksekliğini koru */
       #f_ad, #f_unvan { height: 52px !important; overflow: hidden !important; white-space: normal !important; word-break: break-word !important; }
-      .form-input-cell { height: 20px !important; }
-      select.form-input-cell, .marka-select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background: transparent; border: none !important; }
-      #siparisTable th { background: #ddd !important; color: #000 !important; border-color: #000; -webkit-print-color-adjust: exact; }
-      #siparisTable td { border-color: #000; }
-      #odemeTable .header-dark { background: #ddd !important; color: #000 !important; }
-      .ozel-not-kutusu { border: none !important; color: #000; resize: none; min-height: 20px; padding: 0; }
-      .ozel-not-kutusu::placeholder, .imza-textarea::placeholder { color: transparent; }
-      .imza-textarea { border: none; border-bottom: 1px solid #000 !important; border-radius: 0; background: transparent; resize: none; }
+      #f_adres, #f_fadres { height: 65px !important; }
+      .imza-textarea { border: none; border-bottom: 1px solid #000 !important; }
     }
   </style>
 </head>
 <body>
+
 <div class="card no-print" id="main-app">
   <div style="margin-bottom:10px; font-size:12px;">
-    <b>FİYAT LİSTESİ YÜKLENDİ:</b> <span id="statusMsg" style="font-weight:bold; color:#007bff;">Liste Yükleniyor, lütfen bekleyin...</span>
+    <b>FİYAT LİSTESİ DURUMU:</b> <span id="statusMsg" style="font-weight:bold; color:#007bff;">Yükleniyor...</span>
   </div>
   <div class="search-container">
     <div class="autocomplete-wrapper">
-      <input type="text" id="barcodeInp" placeholder="ÜRÜN KODU VEYA ADI YAZIN/YAPIŞTIRIN VE ENTER'A BASIN" autocomplete="off">
+      <input type="text" id="barcodeInp" placeholder="ÜRÜN KODU VEYA ADI YAZIN" autocomplete="off">
     </div>
     <button onclick="fullReset();" style="background:#dc3545;color:white;border:none;border-radius:8px;cursor:pointer;padding:0 20px;font-weight:bold;">TEMİZLE</button>
   </div>
-  <table id="mainTable">
-    <thead id="hR"></thead>
-    <tbody id="bR"></tbody>
-    <tfoot id="fR"></tfoot>
-  </table>
+  <table id="mainTable"><tbody id="bR"></tbody></table>
 </div>
 
 <div class="card" id="siparis-formu-container">
   <div class="form-header">
-    <img src="siemens.png" alt="Siemens" style="width:150px;object-fit:contain;">
+    <img src="siemens.png" alt="Siemens" style="width:150px;">
     <h2>SİPARİŞ FORMU & SATIŞ SÖZLEŞMESİ</h2>
-    <img src="gokmen.png" alt="Gökmen Teknoloji" style="width:150px;object-fit:contain;">
+    <img src="gokmen.png" alt="Gökmen Teknoloji" style="width:150px;">
   </div>
+  
   <div class="form-grid">
     <div>
-      <div style="background:#f1f3f5;padding:4px;font-weight:bold;margin-bottom:8px;text-align:center;font-size:12px; border:1px solid #ccc; border-radius:4px; -webkit-print-color-adjust: exact; print-color-adjust: exact;">MÜŞTERİ VE SEVK BİLGİLERİ</div>
-      <div class="form-group" style="align-items: flex-start; margin-top: 5px;">
-        <label style="margin-top: 3px;">Müşteri Adı / Soyadı:</label>
+      <div style="background:#f1f3f5;padding:4px;font-weight:bold;margin-bottom:8px;text-align:center;font-size:12px; border:1px solid #ccc; border-radius:4px;">MÜŞTERİ BİLGİLERİ</div>
+      <div class="form-group" style="align-items: flex-start;">
+        <label>Müşteri Adı / Soyadı:</label>
         <textarea id="f_ad"></textarea>
       </div>
       <div class="form-group"><label>Telefon:</label><input type="text" id="f_tel"></div>
-      <div class="form-group"><label>Sözleşme Tarihi:</label><input type="date" id="f_sozlesme"></div>
-      <div class="form-group"><label>Sevk Tarihi:</label><input type="date" id="f_sevk"></div>
-      <div class="form-group" style="align-items: flex-start; margin-top: 5px;">
-        <label style="margin-top: 3px;">Teslimat Adresi:</label>
+      <div class="form-group" style="align-items: flex-start;">
+        <label>Teslimat Adresi:</label>
         <textarea id="f_adres"></textarea>
       </div>
     </div>
+    
     <div>
-      <div style="background:#f1f3f5;padding:4px;font-weight:bold;margin-bottom:8px;text-align:center;font-size:12px; border:1px solid #ccc; border-radius:4px; -webkit-print-color-adjust: exact; print-color-adjust: exact;">FATURA VE TESLİMAT BİLGİLERİ</div>
-      <div class="form-group" style="align-items: flex-start; margin-top: 5px;">
-        <label style="margin-top: 3px;">Fatura Ünvanı:</label>
+      <div style="background:#f1f3f5;padding:4px;font-weight:bold;margin-bottom:8px;text-align:center;font-size:12px; border:1px solid #ccc; border-radius:4px;">FATURA VE SEVK BİLGİLERİ</div>
+      <div class="form-group" style="align-items: flex-start;">
+        <label>Fatura Ünvanı:</label>
         <textarea id="f_unvan"></textarea>
       </div>
-      <div class="form-group"><label>Vergi Dairesi:</label><input type="text" id="f_vd"></div>
-      <div class="form-group"><label>T.C. No / Vergi No:</label><input type="text" id="f_vno"></div>
-      <div class="form-group" style="align-items: flex-start; margin-top: 5px;">
-        <label style="margin-top: 3px;">Fatura Adresi:</label>
+      <div class="form-group"><label>Vergi Dairesi/No:</label><input type="text" id="f_vd"></div>
+      <div class="form-group"><label>Sözleşme Tarihi:</label><input type="date" id="f_sozlesme"></div>
+      <div class="form-group"><label>Sevk Tarihi:</label><input type="date" id="f_sevk"></div>
+      <div class="form-group" style="align-items: flex-start;">
+        <label>Fatura Adresi:</label>
         <textarea id="f_fadres"></textarea>
       </div>
     </div>
@@ -169,239 +138,34 @@
 
   <table id="siparisTable">
     <thead>
-      <tr>
-        <th style="width:30px;">SIRA</th>
-        <th style="width:75px;">MARKA</th>
-        <th style="width:110px;">ÜRÜN KODU</th>
-        <th>AÇIKLAMA</th>
-        <th style="width:40px;">ADET</th>
-        <th style="width:90px;">FİYAT</th>
-      </tr>
+      <tr><th style="width:30px;">SIRA</th><th style="width:75px;">MARKA</th><th style="width:110px;">ÜRÜN KODU</th><th>AÇIKLAMA</th><th style="width:40px;">ADET</th><th style="width:90px;">FİYAT</th></tr>
     </thead>
     <tbody id="siparis-urunler-tbody"></tbody>
     <tfoot>
-      <tr>
-        <td colspan="5" style="text-align:right;font-weight:bold;padding-right:15px;background:#f1f3f5;height:25px;">GENEL TOPLAM :</td>
-        <td id="genelToplamHucre" style="font-weight:bold;font-size:12px;color:#d9534f;background:#f1f3f5;">0 ₺</td>
-      </tr>
+      <tr><td colspan="5" style="text-align:right;font-weight:bold;background:#f1f3f5;">GENEL TOPLAM :</td><td id="genelToplamHucre" style="font-weight:bold;background:#f1f3f5;">0 ₺</td></tr>
     </tfoot>
   </table>
 
   <table id="odemeTable">
-    <thead>
-      <tr><th colspan="7" class="header-dark">TAHSİLATLAR ( MÜŞTERİ ÖDEMELERİ )</th></tr>
-      <tr>
-        <th style="width:25px;">NO</th>
-        <th style="width:90px;">ÖDEME TARİHİ</th>
-        <th style="width:130px;">ÖDEME ŞEKLİ</th>
-        <th style="width:115px;">POS CİHAZI BANKASI</th>
-        <th style="width:85px;">İŞLEM NO</th>
-        <th style="width:110px;">ÖDEME TUTARI</th>
-        <th style="width:90px;">KALAN TUTAR</th>
-      </tr>
-    </thead>
+    <thead><tr><th colspan="7" class="header-dark">TAHSİLATLAR</th></tr></thead>
     <tbody id="odeme-tbody">
-      <script>
-        for(let i=1; i<=5; i++) {
-          document.write(`
-            <tr>
-              <td style="text-align:center;">${i}</td>
-              <td><input type="text" class="form-input-cell" style="font-weight:normal;" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'"></td>
-              <td>
-                <select class="form-input-cell">
-                  <option value=""></option>
-                  <option>WEB TAHSİLAT</option>
-                  <option>BANKA HAVALESİ</option>
-                  <option>KREDİ KARTI TEK ÇEKİM</option>
-                  <option>KREDİ KARTI TAKSİTLİ</option>
-                  <option>ONLİNE SATIŞ</option>
-                  <option>NAKİT</option>
-                  <option>AÇIK HESAP</option>
-                </select>
-              </td>
-              <td><input type="text" class="form-input-cell" style="font-weight:normal;"></td>
-              <td><input type="text" class="form-input-cell" style="font-weight:normal;"></td>
-              <td><input type="text" class="form-input-cell odeme-inp" placeholder="TL" onfocus="this.value=this.value.replace(/[^0-9]/g,'');this.select();" onblur="fmtOdeme(this);" onkeydown="odemeEnterHandler.call(this,event);"></td>
-              <td id="kalan-${i}" style="text-align:center; font-weight:bold; color:#555; background:#f9f9f9;"></td>
-            </tr>
-          `);
-        }
-      </script>
-    </tbody>
+      </tbody>
   </table>
 
-  <textarea class="ozel-not-kutusu" placeholder="SÖZLEŞMEYE EKLEMEK İSTEDİĞİNİZ ÖZEL NOTLARI BURAYA YAZINIZ..."></textarea>
-
-  <div class="kurallar">
-    <p>1. SİPARİŞİ VERİLEN ÜRÜNLERİN TESLİMAT SÜRESİ STOK DURUMUNA GÖRE 1-4 HAFTA ARASINDA DEĞİŞMEKTEDİR.</p>
-    <p>2. ÜRÜN TESLİMATI VE MONTAJI SIEMENS YETKİLİ SERVİSLERİ TARAFINDAN ÜCRETSİZ OLARAK YAPILMAKTADIR.</p>
-    <p>3. ÜRÜNLERİN SAĞLAM ŞEKİLDE TESLİM ALINMASI MÜŞTERİ SORUMLULUĞUNDADIR.</p>
-    <p>4. BELİRTİLEN TARİHTE TESLİM ALINMAYAN ÜRÜNLER İÇİN EK NAKLİYE ÜCRETİ ALINABİLİR.</p>
-  </div>
+  <textarea class="ozel-not-kutusu" placeholder="ÖZEL NOTLAR..."></textarea>
 
   <div class="imza-alani">
-    <div class="imza-kutu">
-      <div class="imza-kutu-baslik">MÜŞTERİ İMZA</div>
-      <div class="musteri-imza-bos"></div>
-      <div class="imza-alt">Adı Soyadı / Tarih</div>
-    </div>
-    <div class="imza-kutu">
-      <div class="imza-kutu-baslik">SATIŞ DANIŞMANI</div>
-      <textarea class="imza-textarea" placeholder="Danışman İsmi..."></textarea>
-      <div class="imza-alt">Gökmen Teknoloji Siemens</div>
-    </div>
+    <div class="imza-kutu"><div>MÜŞTERİ İMZA</div><div style="height:50px;"></div></div>
+    <div class="imza-kutu"><div>SATIŞ DANIŞMANI</div><textarea class="imza-textarea"></textarea></div>
   </div>
 
-  <div class="btn-action-container no-print">
-    <button class="excel-btn" onclick="exportToExcel()">EXCEL AKTAR</button>
-    <button class="print-btn" onclick="window.print()">SÖZLEŞME YAZDIR</button>
+  <div class="btn-action-container no-print" style="text-align:right; margin-top:20px;">
+    <button onclick="window.print()" style="background:#28a745; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">SÖZLEŞME YAZDIR</button>
   </div>
 </div>
 
 <script>
-let db = [], heads = [], linkMap = {};
-
-// Excel Dosyasını Oku
-(async function loadExcel() {
-  try {
-    const r = await fetch('liste.xlsx');
-    const b = await r.arrayBuffer();
-    const w = XLSX.read(b, {type:'array'});
-    const s = w.Sheets[w.SheetNames[0]];
-    const j = XLSX.utils.sheet_to_json(s, {header:1, defval:''});
-    if(j.length < 2) return;
-    heads = j[0];
-    db = j.slice(1).map(row => {
-      let obj = {};
-      heads.forEach((h, i) => obj[h] = row[i]);
-      return obj;
-    });
-    
-    // Link Haritası
-    try {
-      const lr = await fetch('linkler.xlsx');
-      const lb = await lr.arrayBuffer();
-      const lw = XLSX.read(lb, {type:'array'});
-      const ls = lw.Sheets[lw.SheetNames[0]];
-      const lj = XLSX.utils.sheet_to_json(ls, {header:1});
-      lj.forEach(r => { if(r[0] && r[1]) linkMap[fixString(r[0])] = r[1]; });
-    } catch(e) {}
-    
-    document.getElementById('statusMsg').innerText = "Liste Hazır.";
-  } catch(e) {
-    document.getElementById('statusMsg').innerText = "Hata!";
-  }
-})();
-
-function fixString(s) { return s ? String(s).trim().toUpperCase() : ''; }
-
-function fullReset() {
-  document.getElementById('barcodeInp').value = '';
-  document.getElementById('bR').innerHTML = '';
-  document.getElementById('fR').innerHTML = '';
-  document.getElementById('siparis-urunler-tbody').innerHTML = '';
-  document.getElementById('genelToplamHucre').innerText = '0 ₺';
-  document.querySelectorAll('.odeme-inp').forEach(i => i.value = '');
-  document.querySelectorAll('[id^="kalan-"]').forEach(i => i.innerText = '');
-}
-
-// Autocomplete ve Arama Mantığı
-const inp = document.getElementById('barcodeInp');
-inp.addEventListener("input", function() {
-    let a, b, val = this.value;
-    closeAllLists();
-    if (!val) return;
-    a = document.createElement("DIV");
-    a.setAttribute("id", this.id + "autocomplete-list");
-    a.setAttribute("class", "autocomplete-items");
-    this.parentNode.appendChild(a);
-    let count = 0;
-    for (let i = 0; i < db.length; i++) {
-        let code = String(db[i]["STOK KODU"] || "");
-        let desc = String(db[i]["ÜRÜN ADI"] || "");
-        if (code.toUpperCase().includes(val.toUpperCase()) || desc.toUpperCase().includes(val.toUpperCase())) {
-            b = document.createElement("DIV");
-            b.innerHTML = `<strong>${code}</strong> - ${desc}`;
-            b.addEventListener("click", function() {
-                inp.value = code;
-                closeAllLists();
-                addProduct(db[i]);
-            });
-            a.appendChild(b);
-            count++;
-            if (count > 15) break;
-        }
-    }
-});
-
-function closeAllLists() {
-    let x = document.getElementsByClassName("autocomplete-items");
-    for (let i = 0; i < x.length; i++) x[i].parentNode.removeChild(x[i]);
-}
-
-function addProduct(p) {
-    const tbody = document.getElementById('siparis-urunler-tbody');
-    const row = tbody.insertRow();
-    const count = tbody.rows.length;
-    row.innerHTML = `
-      <td style="text-align:center;">${count}</td>
-      <td><select class="marka-select"><option>SIEMENS</option><option>BOSCH</option><option>PROFILO</option></select></td>
-      <td>${p["STOK KODU"]}</td>
-      <td style="white-space:normal; font-size:10px;">${p["ÜRÜN ADI"]}</td>
-      <td><input type="number" class="form-input-cell adet-inp" value="1" onchange="calcFormTotal()"></td>
-      <td><input type="text" class="form-input-cell fiyat-inp" value="${p["FİYAT"] || 0}" onblur="calcFormTotal()"></td>
-    `;
-    calcFormTotal();
-}
-
-function calcFormTotal() {
-    let total = 0;
-    document.querySelectorAll('#siparis-urunler-tbody tr').forEach(tr => {
-        let a = parseFloat(tr.querySelector('.adet-inp').value) || 0;
-        let f = parseFloat(String(tr.querySelector('.fiyat-inp').value).replace(/[^0-9.]/g, '')) || 0;
-        total += (a * f);
-    });
-    document.getElementById('genelToplamHucre').innerText = total.toLocaleString('tr-TR') + ' ₺';
-}
-
-function fmtOdeme(el) {
-    let val = parseFloat(el.value.replace(/[^0-9.]/g, '')) || 0;
-    el.value = val.toLocaleString('tr-TR') + ' ₺';
-    calcFormTotal();
-}
-
-// Küçültme ve Yazdırma Fonksiyonları
-function shrinkToFit(el) {
-    if (!el) return;
-    let maxFS = 11;
-    let minFS = 7;
-    el.style.fontSize = maxFS + 'px';
-    while (el.scrollHeight > el.offsetHeight && maxFS > minFS) {
-        maxFS -= 0.5;
-        el.style.fontSize = maxFS + 'px';
-    }
-}
-
-function calcFitFontSize(el, boxW, boxH, fontBase) {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    ctx.font = fontBase + 'px "Segoe UI", Arial';
-    let text = el.value || el.innerText || "";
-    let availW = boxW - 8;
-    let words = text.split(' ');
-    let lines = 1;
-    let lineW = 0;
-    words.forEach(function(w) {
-        let ww = ctx.measureText((lineW > 0 ? ' ' : '') + w).width;
-        if (lineW + ww > availW) { lines++; lineW = ww; }
-        else { lineW += (lineW > 0 ? ' ' : '') + ww; }
-    });
-    if (lines * (fontBase * 1.2) > boxH && fontBase > 7) {
-        return calcFitFontSize(el, boxW, boxH, fontBase - 0.5);
-    }
-    return fontBase;
-}
-
+// Yazdırma öncesi font ayarlama fonksiyonu (3 satıra göre güncellendi)
 function prepareForPrint() {
     var styleEl = document.getElementById('print-font-override');
     if (!styleEl) {
@@ -411,13 +175,12 @@ function prepareForPrint() {
     }
 
     var rules = '';
-    // 3 Satıra çıkarılan alanlar için yükseklik 52px olarak ayarlandı
     ['f_ad', 'f_unvan'].forEach(function(id) {
         var el = document.getElementById(id);
         if (!el || !el.value.trim()) return;
-        var boxW = el.offsetWidth || 200;
-        var boxH = 52; // 3 satır yüksekliği
-        var fs = calcFitFontSize(el, boxW, boxH, 11);
+        var boxH = 52; // 3 satır için yükseklik sınırı
+        var fs = 11; // Başlangıç fontu
+        // Burada basitçe yüksekliği sabitliyoruz, CSS zaten taşmayı önleyecek
         rules += '#' + id + ' { font-size: ' + fs + 'px !important; height: 52px !important; }\n';
     });
 
@@ -425,6 +188,9 @@ function prepareForPrint() {
 }
 
 window.addEventListener('beforeprint', prepareForPrint);
+
+function fullReset() { location.reload(); }
 </script>
+
 </body>
 </html>
