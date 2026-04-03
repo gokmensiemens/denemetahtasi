@@ -114,7 +114,7 @@
       .form-group textarea { border: 1px solid #000 !important; border-radius: 4px !important; background: transparent; }
       
       #f_adres, #f_fadres { height: 65px !important; }
-      #f_ad, #f_unvan { height: 35px !important; overflow: hidden !important; }
+      #f_ad, #f_unvan { height: 35px !important; overflow: hidden !important; white-space: normal !important; word-break: break-word !important; }
       
       .form-input-cell { height: 20px !important; }
       select.form-input-cell, .marka-select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background: transparent; border: none !important; }
@@ -689,7 +689,7 @@ function updateSiparisFormu(){
     tr.innerHTML=`
       <td>${index+1}</td>
       <td style="padding:0;">${markaSelectHTML('SİEMENS')}</td>
-      <td style="font-weight:bold;text-align:center;">${code}</td>
+      <td style="font-weight:bold;">${code}</td>
       <td title="${desc}">${desc}</td>
       <td><input type="number" class="form-input-cell" value="1" style="text-align:center;"></td>
       <td><input type="text" class="form-input-cell urun-fiyat-inp" placeholder="TL"
@@ -704,7 +704,7 @@ function updateSiparisFormu(){
     tr.innerHTML=`
       <td style="height:20px;">${i+1}</td>
       <td style="padding:0;"><select class="marka-select">${boslukOpts}</select></td>
-      <td><input type="text" class="form-input-cell" style="text-align:center;"></td>
+      <td><input type="text" class="form-input-cell"></td>
       <td><input type="text" class="form-input-cell" style="text-align:left;"></td>
       <td><input type="number" class="form-input-cell" value="" style="text-align:center;"></td>
       <td><input type="text" class="form-input-cell urun-fiyat-inp" placeholder=""
@@ -758,21 +758,10 @@ function shrinkToFit(el) {
     const compStyle = window.getComputedStyle(el);
 
     if (isTextarea) {
-        // f_ad ve f_unvan: sabit 35px yüksekliğe göre shrink
-        let fixedH = (el.id === 'f_ad' || el.id === 'f_unvan') ? 35 : null;
-        if (fixedH) {
-            el.style.height = fixedH + 'px';
-            el.style.overflow = 'hidden';
-            while ((el.scrollHeight > fixedH || el.scrollWidth > el.clientWidth + 2) && fs > 5) {
-                fs -= 0.5;
-                el.style.fontSize = fs + 'px';
-            }
-        } else {
-            // Hem yatay taşmayı (scrollWidth) hem dikey taşmayı (scrollHeight) ölç ve küçült!
-            while ((el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth + 2) && fs > 4) {
-                fs -= 0.5;
-                el.style.fontSize = fs + 'px';
-            }
+        // Hem yatay taşmayı (scrollWidth) hem dikey taşmayı (scrollHeight) ölç ve küçült!
+        while ((el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth + 2) && fs > 4) {
+            fs -= 0.5;
+            el.style.fontSize = fs + 'px';
         }
     } else {
         let padding = parseFloat(compStyle.paddingLeft || 0) + parseFloat(compStyle.paddingRight || 0);
@@ -803,51 +792,83 @@ document.addEventListener('input', function(e) { shrinkToFit(e.target); });
 document.addEventListener('change', function(e) { shrinkToFit(e.target); });
 window.addEventListener('resize', applyAllShrink);
 
+function calcFitFontSize(el, boxW, boxH, startFs) {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    var text = el.value || '';
+    if (!text.trim()) return startFs;
+    var fs = startFs;
+    var fontBase = window.getComputedStyle(el).fontFamily || 'Arial';
+    var paddingH = 12; // sol+sağ padding
+    var lineH = 1.35;  // line-height katsayısı
+    var availW = boxW - paddingH;
+
+    for (var tries = 0; tries < 120 && fs > 4; tries++) {
+        ctx.font = 'normal ' + fs + 'px ' + fontBase;
+        // Kelimelere bölerek word-wrap simülasyonu
+        var words = text.split(' ');
+        var lines = 1;
+        var lineW = 0;
+        words.forEach(function(w) {
+            var ww = ctx.measureText((lineW > 0 ? ' ' : '') + w).width;
+            if (lineW + ww > availW && lineW > 0) { lines++; lineW = ctx.measureText(w).width; }
+            else { lineW += ww; }
+        });
+        var neededH = lines * fs * lineH;
+        if (neededH <= boxH) break;
+        fs -= 0.3;
+    }
+    return Math.max(fs, 4);
+}
+
 function prepareForPrint() {
     const container = document.getElementById('siparis-formu-container');
-    container.style.width = '190mm'; 
+    container.style.width = '190mm';
     container.style.margin = '0 auto';
     applyAllShrink();
-    // f_ad ve f_unvan için özel sığdırma: yükseklik sabit 35px, font küçültülür
+
+    // f_ad ve f_unvan için dinamik @media print stili enjekte et
+    var styleEl = document.getElementById('print-font-override');
+    if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = 'print-font-override';
+        document.head.appendChild(styleEl);
+    }
+
+    var rules = '';
     ['f_ad', 'f_unvan'].forEach(function(id) {
         var el = document.getElementById(id);
         if (!el || !el.value.trim()) return;
-        el.style.height = '35px';
-        el.style.overflow = 'hidden';
-        var fs = 11;
-        el.style.fontSize = fs + 'px';
-        // Hem yatay hem dikey taşma olmayana kadar küçült
-        var maxTry = 60;
-        while ((el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth + 2) && fs > 5 && maxTry-- > 0) {
-            fs -= 0.5;
-            el.style.fontSize = fs + 'px';
-        }
+        var rect = el.getBoundingClientRect();
+        var boxW = rect.width || el.offsetWidth || 200;
+        var boxH = 35; // sabit yükseklik px
+        var fs = calcFitFontSize(el, boxW, boxH, 11);
+        rules += '#' + id + ' { font-size: ' + fs + 'px !important; overflow: hidden !important; height: 35px !important; white-space: normal !important; word-break: break-word !important; }\n';
     });
+
+    styleEl.textContent = '@media print {\n' + rules + '}';
 }
 
 function restoreAfterPrint() {
     const container = document.getElementById('siparis-formu-container');
     container.style.width = '';
     container.style.margin = 'auto';
-    // f_ad ve f_unvan'ı normale döndür
-    ['f_ad', 'f_unvan'].forEach(function(id) {
-        var el = document.getElementById(id);
-        if (!el) return;
-        el.style.height = '';
-        el.style.overflow = '';
-    });
+    var styleEl = document.getElementById('print-font-override');
+    if (styleEl) styleEl.textContent = '';
     applyAllShrink();
 }
 
-window.addEventListener('beforeprint', prepareForPrint);
+window.addEventListener('beforeprint', function() {
+    prepareForPrint();
+});
 window.addEventListener('afterprint', restoreAfterPrint);
 
 function triggerPrint() {
     prepareForPrint();
     setTimeout(() => {
         window.print();
-        restoreAfterPrint(); 
-    }, 150); 
+        restoreAfterPrint();
+    }, 300);
 }
 
 </script>
