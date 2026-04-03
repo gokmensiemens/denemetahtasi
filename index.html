@@ -104,114 +104,30 @@
     .excel-btn:hover { background: #0056b3; }
     
     @media print {
-      @page { size: A4 portrait; margin: 3mm; } /* Marjin minimuma indirildi */
-      body { 
-        background: white; 
-        padding: 0; 
-        zoom: 0.78 !important; /* Tüm içeriği %78 küçült - kritik ayar */
-        -webkit-transform: scale(0.78);
-        -moz-transform: scale(0.78);
-        transform: scale(0.78);
-        -webkit-transform-origin: top left;
-        -moz-transform-origin: top left;
-        transform-origin: top left;
-        width: 128%; /* Scale sonrası genişlik ayarı */
-        height: 0;
-        overflow: visible;
-      }
-      
+      @page { size: A4 portrait; margin: 5mm; }
+      body { background: white; padding: 0; zoom: 1 !important; }
       .no-print, .search-container, #mainTable, #statusMsg { display: none !important; }
-      .card { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 2mm !important; width: 100% !important; page-break-inside: avoid; }
+      .card { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
       #siparis-formu-container { display: block !important; padding-top: 0; }
       
-      /* Font boyutları küçültüldü */
-      * { font-size: 8px !important; }
-      .form-header h2 { font-size: 14px !important; margin: 2px 0 !important; }
-      .form-group label { font-size: 8px !important; width: 100px !important; }
-      .form-group input, .form-group textarea { font-size: 8px !important; height: 16px !important; border: 1px solid #000 !important; }
-      .form-group textarea { height: 30px !important; overflow: hidden !important; }
+      .form-group input { border: 1px solid #000 !important; border-radius: 4px !important; height: 22px !important; background: transparent; }
+      .form-group textarea { border: 1px solid #000 !important; border-radius: 4px !important; background: transparent; }
       
-      /* Tablolar compact mod */
-      #siparisTable th, #siparisTable td { 
-        height: 14px !important; 
-        padding: 1px 2px !important; 
-        font-size: 7px !important;
-        border: 0.5px solid #000 !important;
-      }
+      #f_adres, #f_fadres { height: 65px !important; }
+      #f_ad, #f_unvan { height: 52px !important; overflow: hidden !important; white-space: normal !important; word-break: break-word !important; }
       
-      #odemeTable th, #odemeTable td {
-        height: 14px !important;
-        padding: 1px 2px !important;
-        font-size: 7px !important;
-        border: 0.5px solid #000 !important;
-      }
+      .form-input-cell { height: 20px !important; }
+      select.form-input-cell, .marka-select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background: transparent; border: none !important; }
       
+      #siparisTable th { background: #ddd !important; color: #000 !important; border-color: #000; -webkit-print-color-adjust: exact; }
+      #siparisTable td { border-color: #000; }
+      
+      #odemeTable th { -webkit-print-color-adjust: exact; }
       #odemeTable .header-dark { background: #ddd !important; color: #000 !important; }
-      
-      .kurallar { 
-        font-size: 6.5px !important; 
-        line-height: 1.1 !important; 
-        padding: 4px !important; 
-        margin-top: 3px !important;
-        border: 0.5px solid #ccc;
-      }
-      .kurallar p { margin: 1px 0 !important; }
-      
-      .ozel-not-kutusu { 
-        border: 1px solid #000 !important; 
-        color: #000; 
-        resize: none; 
-        min-height: 15px !important; 
-        padding: 2px !important; 
-        font-size: 7px !important;
-        margin: 2px 0 !important;
-      }
-      
-      /* İmza alanı compact */
-      .imza-alani { margin-top: 5px !important; gap: 5px !important; }
-      .imza-kutu-baslik { font-size: 8px !important; margin-bottom: 2px !important; }
-      .imza-textarea { 
-        border: none !important; 
-        border-bottom: 1px solid #000 !important; 
-        border-radius: 0; 
-        background: transparent; 
-        resize: none; 
-        min-height: 20px !important;
-        font-size: 8px !important;
-        padding: 2px !important;
-      }
-      .musteri-imza-bos { min-height: 25px !important; }
-      .imza-alt { margin-top: 2px !important; padding-top: 2px !important; font-size: 7px !important; }
-      
-      /* Grid aralıkları */
-      .form-grid { gap: 5px !important; margin-bottom: 3px !important; }
-      
-      /* Tablo başlıkları */
-      #siparisTable th { background: #ddd !important; color: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      
-      /* Tüm boşlukları kaldır */
-      .form-group { margin-bottom: 1px !important; }
-      #f_adres, #f_fadres { height: 35px !important; }
-      #f_ad, #f_unvan { height: 30px !important; }
-      
-      /* Genel toplam ve bakiye satırları */
-      #siparisTable tfoot td { height: 16px !important; font-size: 8px !important; }
-      
-      /* Select elemanları düz metin gibi görünsün */
-      select.form-input-cell, .marka-select { 
-        -webkit-appearance: none; 
-        -moz-appearance: none; 
-        appearance: none; 
-        background: transparent; 
-        border: none !important;
-        font-size: 7px !important;
-      }
-      
-      /* Tüm elementlerin sayfa içinde kalmasını garantile */
-      tr, td, th, div, table { page-break-inside: avoid !important; }
-      .card { page-break-after: avoid !important; }
-      
-      .char-hint, .no-print { display: none !important; }
+      .ozel-not-kutusu { border: none !important; color: #000; resize: none; min-height: 20px; padding: 0; }
+      .ozel-not-kutusu::placeholder, .imza-textarea::placeholder { color: transparent; }
+      .imza-textarea { border: none; border-bottom: 1px solid #000 !important; border-radius: 0; background: transparent; resize: none; }
+      .char-hint { display: none !important; }
     }
   </style>
 </head>
