@@ -104,7 +104,7 @@
     .excel-btn:hover { background: #0056b3; }
     
     @media print {
-      @page { size: A4 portrait; margin: 5mm; }
+      @page { size: A4 portrait; margin: 3mm; }
       body { background: white; padding: 0; zoom: 1 !important; }
       .no-print, .search-container, #mainTable, #statusMsg { display: none !important; }
       .card { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
@@ -822,12 +822,13 @@ function calcFitFontSize(el, boxW, boxH, startFs) {
 }
 
 function prepareForPrint() {
+    // Sayfayı %75 ölçeğinde A4'e sığdır
     const container = document.getElementById('siparis-formu-container');
-    container.style.width = '190mm';
-    container.style.margin = '0 auto';
-    applyAllShrink();
-
-    // f_ad ve f_unvan için dinamik @media print stili enjekte et
+    container.style.transform = 'scale(0.75)';
+    container.style.transformOrigin = 'top left';
+    container.style.width = '133.33%'; // 100/0.75 = 133.33%
+    
+    // Dinamik font boyutları için stil ekle
     var styleEl = document.getElementById('print-font-override');
     if (!styleEl) {
         styleEl = document.createElement('style');
@@ -835,13 +836,14 @@ function prepareForPrint() {
         document.head.appendChild(styleEl);
     }
 
+    // f_ad ve f_unvan için optimize edilmiş font boyutları
     var rules = '';
     ['f_ad', 'f_unvan'].forEach(function(id) {
         var el = document.getElementById(id);
         if (!el || !el.value.trim()) return;
         var rect = el.getBoundingClientRect();
         var boxW = rect.width || el.offsetWidth || 200;
-        var boxH = 52; // sabit yükseklik px
+        var boxH = 52;
         var fs = calcFitFontSize(el, boxW, boxH, 11);
         rules += '#' + id + ' { font-size: ' + fs + 'px !important; overflow: hidden !important; height: 52px !important; white-space: normal !important; word-break: break-word !important; }\n';
     });
@@ -851,17 +853,15 @@ function prepareForPrint() {
 
 function restoreAfterPrint() {
     const container = document.getElementById('siparis-formu-container');
+    container.style.transform = '';
+    container.style.transformOrigin = '';
     container.style.width = '';
-    container.style.margin = 'auto';
+    
     var styleEl = document.getElementById('print-font-override');
     if (styleEl) styleEl.textContent = '';
+    
     applyAllShrink();
 }
-
-window.addEventListener('beforeprint', function() {
-    prepareForPrint();
-});
-window.addEventListener('afterprint', restoreAfterPrint);
 
 function triggerPrint() {
     prepareForPrint();
@@ -870,6 +870,10 @@ function triggerPrint() {
         restoreAfterPrint();
     }, 300);
 }
+
+// Yazdırma eventlerini dinle
+window.addEventListener('beforeprint', prepareForPrint);
+window.addEventListener('afterprint', restoreAfterPrint);
 
 </script>
 </body>
