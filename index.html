@@ -58,6 +58,15 @@
     #siparisTable th, #siparisTable td { border: 1px solid #ccc; }
     #siparisTable th { background: #444; color: white; height: 22px; font-size: 11px; padding: 2px; }
     #siparisTable td { font-size: 11px; padding: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Marka dropdown - sipariş tablosuna özel */
+    .marka-select {
+      width: 100%; box-sizing: border-box; border: none; border-bottom: 1px solid #ccc;
+      padding: 1px 2px; text-align: center; background: transparent;
+      font-weight: bold; font-size: 11px; height: 20px; cursor: pointer;
+      appearance: auto;
+    }
+    .marka-select:focus { outline: none; border-bottom-color: #007bff; }
     
     .form-input-cell { width: 100%; box-sizing: border-box; border: none; padding: 2px; text-align: center; background: transparent; font-weight: bold; font-size: 11px; height: 20px;}
     select.form-input-cell { appearance: auto; cursor: pointer; padding: 0; font-size: 10px; }
@@ -73,30 +82,18 @@
     .ozel-not-kutusu { width: 100%; box-sizing: border-box; margin: 5px 0; padding: 6px; border: 2px dashed #dc3545; border-radius: 4px; color: red; font-weight: bold; font-size: 11px; font-family: inherit; resize: vertical; min-height: 35px; }
     .ozel-not-kutusu::placeholder { color: red; opacity: 0.7; }
 
-    /* İMZA ALANI */
     .imza-alani { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 15px; padding: 0 10px; gap: 15px; }
     .imza-kutu { text-align: center; font-weight: bold; font-size: 12px; flex: 1; display: flex; flex-direction: column; align-items: center; }
     .imza-kutu-baslik { margin-bottom: 5px; font-size: 12px; font-weight: bold; }
     .imza-alt { border-top: 1px solid #333; margin-top: 8px; padding-top: 5px; font-size: 10px; font-weight: normal; color: #555; width: 100%; text-align: center; }
 
     .imza-textarea {
-      box-sizing: border-box;
-      border: 1px solid #bbb;
-      border-radius: 4px;
-      font-size: 12px;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      font-weight: bold;
-      text-align: center;
-      padding: 5px 6px;
-      resize: none;
-      background: #fafafa;
-      line-height: 1.6;
-      display: block;
+      box-sizing: border-box; border: 1px solid #bbb; border-radius: 4px;
+      font-size: 12px; font-family: 'Segoe UI', Arial, sans-serif; font-weight: bold;
+      text-align: center; padding: 5px 6px; resize: none; background: #fafafa; line-height: 1.6; display: block;
     }
     .imza-textarea:focus { outline: none; border-color: #007bff; background: #fff; }
     .imza-textarea::placeholder { color: #bbb; font-weight: normal; font-style: italic; font-size: 11px; }
-
-    /* Müşteri alanı boş imza sahası */
     .musteri-imza-bos { min-height: 52px; width: 100%; }
 
     .btn-action-container { float: right; margin-top: 10px; display: flex; gap: 10px; }
@@ -114,13 +111,14 @@
       .form-group input { border: none; border-bottom: 1px solid #000; border-radius: 0; height: 18px; }
       .form-input-cell { height: 18px; }
       select.form-input-cell { -webkit-appearance: none; -moz-appearance: none; appearance: none; background: transparent; border: none !important; }
+      .marka-select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background: transparent; border: none; border-bottom: 1px solid #000 !important; }
       #siparisTable th { background: #ddd !important; color: #000 !important; border-color: #000; -webkit-print-color-adjust: exact; }
       #siparisTable td { border-color: #000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       #odemeTable th { -webkit-print-color-adjust: exact; }
       #odemeTable .header-dark { background: #ddd !important; color: #000 !important; }
       .ozel-not-kutusu { border: none !important; color: #000; resize: none; overflow: hidden; min-height: 20px; padding: 0; }
       .ozel-not-kutusu::placeholder { color: transparent; }
-      .imza-textarea { border: none; border-bottom: 1px solid #000 !important; border-radius: 0; background: transparent; resize: none; overflow: hidden; -webkit-print-color-adjust: exact; }
+      .imza-textarea { border: none; border-bottom: 1px solid #000 !important; border-radius: 0; background: transparent; resize: none; overflow: hidden; }
       .imza-textarea::placeholder { color: transparent; }
       .char-hint { display: none !important; }
     }
@@ -164,7 +162,6 @@
     <div>
       <div style="background:#f1f3f5; padding:4px; font-weight:bold; margin-bottom:8px; text-align:center; font-size:12px;">FATURA VE TESLİMAT BİLGİLERİ</div>
       <div class="form-group"><label>Sözleşme Tarihi:</label><input type="text" id="excel_sozlesme_tarihi" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'"></div>
-      
       <div class="form-group">
         <label>Sevk/Montaj Tarihi:</label>
         <input type="text" id="sevkTarihiInp" style="flex-grow: 1;" onfocus="if(this.value !== 'İLERİ TESLİM, SONRA BİLDİRİLECEK') this.type='date'" onblur="if(!this.value) this.type='text'">
@@ -172,7 +169,6 @@
           <input type="checkbox" style="flex-grow: 0; margin-right: 5px;" onchange="let el=document.getElementById('sevkTarihiInp'); if(this.checked){el.type='text'; el.value='İLERİ TESLİM, SONRA BİLDİRİLECEK'; el.style.fontSize='10px'; el.style.fontWeight='bold';} else {el.value=''; el.type='text'; el.style.fontSize='12px'; el.style.fontWeight='normal';}"> İleri Teslim
         </label>
       </div>
-
       <div class="form-group"><label>Fatura Ünvanı:</label><input type="text"></div>
       <div class="form-group"><label>Fatura Adresi:</label><input type="text"></div>
       <div class="form-group"><label>Vergi Dairesi:</label><input type="text"></div>
@@ -184,18 +180,17 @@
     <thead>
       <tr>
         <th style="width:30px;">SIRA</th>
-        <th style="width:70px;">MARKA</th>
+        <th style="width:75px;">MARKA</th>
         <th style="width:110px;">ÜRÜN KODU</th>
         <th>AÇIKLAMA</th>
         <th style="width:40px;">ADET</th>
         <th style="width:90px;">FİYAT</th>
       </tr>
     </thead>
-    <tbody id="siparis-urunler-tbody">
-    </tbody>
+    <tbody id="siparis-urunler-tbody"></tbody>
     <tfoot>
       <tr>
-        <td colspan="5" style="text-align:right; font-weight:bold; padding-right:15px; background:#f1f3f5; height: 25px;">GENEL TOPLAM :</td>
+        <td colspan="5" style="text-align:right; font-weight:bold; padding-right:15px; background:#f1f3f5; height:25px;">GENEL TOPLAM :</td>
         <td id="genelToplamHucre" style="font-weight:bold; font-size:12px; color:#d9534f; background:#f1f3f5;">0 ₺</td>
       </tr>
     </tfoot>
@@ -203,9 +198,7 @@
 
   <table id="odemeTable">
     <thead>
-      <tr>
-        <th colspan="7" class="header-dark">TAHSİLATLAR ( MÜŞTERİ ÖDEMELERİ )</th>
-      </tr>
+      <tr><th colspan="7" class="header-dark">TAHSİLATLAR ( MÜŞTERİ ÖDEMELERİ )</th></tr>
       <tr>
         <th style="width:25px;">NO</th>
         <th style="width:90px;">ÖDEME TARİHİ</th>
@@ -272,47 +265,25 @@
     <p>7. 6502 SAYILI TÜKETİCİNİN KORUNMASI HAKKINDAKİ KANUNA GÖRE, MAĞAZADAN ALINAN ÜRÜNLERDE CAYMA HAKKI YOKTUR. İADE TALEPLERİNİN KABULÜ GÖKMEN A.Ş.'NİN TASARRUFUNDADIR. İADENİN KABUL EDİLMESİ DURUMUNDA İSE İADE BEDELİ 30 GÜN SONRA MÜŞTERİNİN HESABINA YATIRILACAKTIR.</p>
   </div>
 
-  <!-- İMZA ALANI -->
   <div class="imza-alani">
-
-    <!-- MAĞAZA -->
     <div class="imza-kutu">
       <div class="imza-kutu-baslik">MAĞAZA</div>
-      <textarea
-        id="magaza-adi-inp"
-        class="imza-textarea"
-        rows="3"
-        maxlength="20"
-        placeholder="Mağaza adı..."
-        style="width: 180px;"
-      ></textarea>
-      <div class="char-hint no-print" style="font-size:9px; color:#aaa; margin-top:2px;">Maks. 20 karakter</div>
+      <textarea id="magaza-adi-inp" class="imza-textarea" rows="3" maxlength="20" placeholder="Mağaza adı..." style="width:180px;"></textarea>
+      <div class="char-hint no-print" style="font-size:9px;color:#aaa;margin-top:2px;">Maks. 20 karakter</div>
       <div class="imza-alt">(Kaşe / İmza)</div>
     </div>
-
-    <!-- SATIŞ DANIŞMANI -->
     <div class="imza-kutu">
       <div class="imza-kutu-baslik">SATIŞ DANIŞMANI</div>
-      <textarea
-        id="danisan-bilgi-inp"
-        class="imza-textarea"
-        rows="3"
-        maxlength="100"
-        placeholder="Adı Soyadı&#10;Telefon Numarası"
-        style="width: 220px;"
-      ></textarea>
-      <div class="char-hint no-print" style="font-size:9px; color:#aaa; margin-top:2px;">Ad Soyad / Telefon (maks. 100 karakter)</div>
+      <textarea id="danisan-bilgi-inp" class="imza-textarea" rows="3" maxlength="100" placeholder="Adı Soyadı&#10;Telefon Numarası" style="width:220px;"></textarea>
+      <div class="char-hint no-print" style="font-size:9px;color:#aaa;margin-top:2px;">Ad Soyad / Telefon</div>
       <div class="imza-alt">İmza</div>
     </div>
-
-    <!-- MÜŞTERİ -->
     <div class="imza-kutu">
       <div class="imza-kutu-baslik">MÜŞTERİ</div>
-      <div style="font-size:10px; font-weight:normal; margin-bottom:4px; color:#555;">Okudum, Kabul Ediyorum</div>
+      <div style="font-size:10px;font-weight:normal;margin-bottom:4px;color:#555;">Okudum, Kabul Ediyorum</div>
       <div class="musteri-imza-bos"></div>
       <div class="imza-alt">Adı Soyadı / Tarih / İmza</div>
     </div>
-
   </div>
 
   <div class="btn-action-container no-print">
@@ -329,137 +300,142 @@ let bipCol = "", phCol = "";
 let linkMap = {}; 
 let currentFocus = -1;
 let priceStartIndex = 13;
-let firstFooterIdx = 13; 
+let firstFooterIdx = 13;
+
+// Marka dropdown için HTML - her satırda kullanılacak
+function markaSelectHTML(secilenDeger) {
+  const markalar = ['SİEMENS', 'SHAZA', 'CEPKASK', 'DİĞER'];
+  let opts = markalar.map(m =>
+    `<option value="${m}"${m === secilenDeger ? ' selected' : ''}>${m}</option>`
+  ).join('');
+  return `<select class="marka-select">${opts}</select>`;
+}
 
 const fixString = (str) => !str ? "" : String(str)
-  .replace(/İ/g, 'i')
-  .replace(/I/g, 'ı')
-  .toLocaleLowerCase('tr-TR')
-  .replace(/\s/g, '')
-  .trim();
+  .replace(/İ/g, 'i').replace(/I/g, 'ı')
+  .toLocaleLowerCase('tr-TR').replace(/\s/g, '').trim();
 
 function fullReset() {
-    cart = []; manualBundleVal = ""; partialHavale = ""; partialTek = "";
-    refreshTable();
-    document.getElementById('barcodeInp').value = "";
-    document.getElementById('barcodeInp').focus();
-    closeAllLists();
+  cart = []; manualBundleVal = ""; partialHavale = ""; partialTek = "";
+  refreshTable();
+  document.getElementById('barcodeInp').value = "";
+  document.getElementById('barcodeInp').focus();
+  closeAllLists();
 }
 
 function hesaplaBakiye() {
-    let genelToplam = 0;
-    document.querySelectorAll('.urun-fiyat-inp').forEach(inp => {
-        let val = inp.value.replace(/[^0-9]/g, '');
-        if(val) genelToplam += parseInt(val);
-    });
-    document.getElementById('genelToplamHucre').innerText = genelToplam.toLocaleString('tr-TR') + ' ₺';
+  let genelToplam = 0;
+  document.querySelectorAll('.urun-fiyat-inp').forEach(inp => {
+    let val = inp.value.replace(/[^0-9]/g, '');
+    if(val) genelToplam += parseInt(val);
+  });
+  document.getElementById('genelToplamHucre').innerText = genelToplam.toLocaleString('tr-TR') + ' ₺';
 
-    let toplamOdenen = 0;
-    document.querySelectorAll('.odeme-inp').forEach(inp => {
-        let val = inp.value.replace(/[^0-9]/g, '');
-        if(val) toplamOdenen += parseInt(val);
-    });
-
-    let kalan = genelToplam - toplamOdenen;
-    document.getElementById('kalanBakiyeInp').value = kalan.toLocaleString('tr-TR') + ' ₺';
+  let toplamOdenen = 0;
+  document.querySelectorAll('.odeme-inp').forEach(inp => {
+    let val = inp.value.replace(/[^0-9]/g, '');
+    if(val) toplamOdenen += parseInt(val);
+  });
+  document.getElementById('kalanBakiyeInp').value = (genelToplam - toplamOdenen).toLocaleString('tr-TR') + ' ₺';
 }
 
 function fiyatEnterHandler(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        this.blur();
-        let allInputs = Array.from(document.querySelectorAll('.urun-fiyat-inp'));
-        let idx = allInputs.indexOf(this);
-        if (idx > -1 && idx < allInputs.length - 1) { allInputs[idx + 1].focus(); allInputs[idx + 1].select(); }
-    }
+  if (e.key === 'Enter') {
+    e.preventDefault(); this.blur();
+    let all = Array.from(document.querySelectorAll('.urun-fiyat-inp'));
+    let idx = all.indexOf(this);
+    if (idx > -1 && idx < all.length - 1) { all[idx+1].focus(); all[idx+1].select(); }
+  }
 }
 
 function odemeEnterHandler(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        this.blur();
-        let allInputs = Array.from(document.querySelectorAll('.odeme-inp'));
-        let idx = allInputs.indexOf(this);
-        if (idx > -1 && idx < allInputs.length - 1) { allInputs[idx + 1].focus(); allInputs[idx + 1].select(); }
-    }
+  if (e.key === 'Enter') {
+    e.preventDefault(); this.blur();
+    let all = Array.from(document.querySelectorAll('.odeme-inp'));
+    let idx = all.indexOf(this);
+    if (idx > -1 && idx < all.length - 1) { all[idx+1].focus(); all[idx+1].select(); }
+  }
 }
 
 function exportToExcel() {
-    let inputs = document.querySelectorAll('.form-group input');
-    let musteriAd = document.getElementById('excel_musteri_ad').value.trim() || "Siparis_Formu";
-    let tarihInput = document.getElementById('excel_sozlesme_tarihi').value; 
-    let formatliTarih = "";
+  let inputs = document.querySelectorAll('.form-group input');
+  let musteriAd = document.getElementById('excel_musteri_ad').value.trim() || "Siparis_Formu";
+  let tarihInput = document.getElementById('excel_sozlesme_tarihi').value;
+  let formatliTarih = "";
+  if (tarihInput) {
+    let p = tarihInput.split('-');
+    formatliTarih = p[2] + "." + p[1] + "." + p[0];
+  } else {
+    let d = new Date();
+    formatliTarih = String(d.getDate()).padStart(2,'0') + "." + String(d.getMonth()+1).padStart(2,'0') + "." + d.getFullYear();
+  }
 
-    if (tarihInput) {
-        let p = tarihInput.split('-');
-        formatliTarih = p[2] + "." + p[1] + "." + p[0]; 
-    } else {
-        let d = new Date();
-        formatliTarih = String(d.getDate()).padStart(2,'0') + "." + String(d.getMonth()+1).padStart(2,'0') + "." + d.getFullYear();
+  let ws_data = [
+    ["SİPARİŞ FORMU & SATIŞ SÖZLEŞMESİ"], [],
+    ["MÜŞTERİ Ve TESLİMAT BİLGİLERİ","","","FATURA BİLGİLERİ"],
+    ["Adı-Soyadı:", inputs[0].value, "", "Sözleşme Tarihi:", formatliTarih],
+    ["1. İletişim Numarası:", inputs[1].value, "", "Sevk/Montaj Tarihi:", inputs[7].value],
+    ["2. İletişim Numarası:", inputs[2].value, "", "Fatura Ünvanı:", inputs[9].value],
+    ["e-mail:", inputs[3].value, "", "Fatura Adresi:", inputs[10].value],
+    ["Sevk Adresi:", inputs[4].value, "", "Vergi Dairesi:", inputs[11].value],
+    ["Teslim Alacak Kişi:", inputs[5].value, "", "TC Kimlik No / Vergi No:", inputs[12].value],
+    [], ["SİPARİŞ EDİLEN ÜRÜNLER"],
+    ["SIRA","MARKA","ÜRÜN KODU","AÇIKLAMA","ADET","FİYAT"]
+  ];
+
+  document.querySelectorAll('#siparisTable tbody tr').forEach(tr => {
+    let cols = tr.querySelectorAll('td');
+    if(cols.length >= 6) {
+      let marka = cols[1].querySelector('select')?.value || cols[1].innerText || "";
+      let kod = cols[2].querySelector('input')?.value || cols[2].innerText || "";
+      let aciklama = cols[3].querySelector('input')?.value || cols[3].innerText || "";
+      let adet = cols[4].querySelector('input')?.value || "";
+      let fiyat = cols[5].querySelector('input')?.value || "";
+      if(marka || kod || aciklama) ws_data.push([cols[0].innerText, marka, kod, aciklama, adet, fiyat]);
     }
-    
-    let ws_data = [
-      ["SİPARİŞ FORMU & SATIŞ SÖZLEŞMESİ"], [],
-      ["MÜŞTERİ Ve TESLİMAT BİLGİLERİ","","","FATURA BİLGİLERİ"],
-      ["Adı-Soyadı:", inputs[0].value, "", "Sözleşme Tarihi:", formatliTarih],
-      ["1. İletişim Numarası:", inputs[1].value, "", "Sevk/Montaj Tarihi:", inputs[7].value],
-      ["2. İletişim Numarası:", inputs[2].value, "", "Fatura Ünvanı:", inputs[9].value],
-      ["e-mail:", inputs[3].value, "", "Fatura Adresi:", inputs[10].value],
-      ["Sevk Adresi:", inputs[4].value, "", "Vergi Dairesi:", inputs[11].value],
-      ["Teslim Alacak Kişi:", inputs[5].value, "", "TC Kimlik No / Vergi No:", inputs[12].value],
-      [], ["SİPARİŞ EDİLEN ÜRÜNLER"],
-      ["SIRA","MARKA","ÜRÜN KODU","AÇIKLAMA","ADET","FİYAT"]
-    ];
+  });
 
-    document.querySelectorAll('#siparisTable tbody tr').forEach(tr => {
-      let cols = tr.querySelectorAll('td');
-      if(cols.length >= 6) {
-         let marka = cols[1].innerText || cols[1].querySelector('input')?.value || "";
-         let kod = cols[2].innerText || cols[2].querySelector('input')?.value || "";
-         let aciklama = cols[3].innerText || cols[3].querySelector('input')?.value || "";
-         if(marka || kod || aciklama) {
-             ws_data.push([cols[0].innerText, marka, kod, aciklama, cols[4].querySelector('input')?.value||"", cols[5].querySelector('input')?.value||""]);
-         }
-      }
-    });
+  ws_data.push(["","","","","GENEL TOPLAM:", document.getElementById('genelToplamHucre').innerText]);
+  ws_data.push([]);
+  ws_data.push(["TAHSİLATLAR ( MÜŞTERİ ÖDEMELERİ )"]);
+  ws_data.push(["NO","TARİH","ÖDEME ŞEKLİ","POS CİHAZI BANKASI","KART TÜRÜ","TAKSİT","ÖDENEN TUTAR"]);
 
-    ws_data.push(["","","","","GENEL TOPLAM:", document.getElementById('genelToplamHucre').innerText]);
-    ws_data.push([]);
-    ws_data.push(["TAHSİLATLAR ( MÜŞTERİ ÖDEMELERİ )"]);
-    ws_data.push(["NO","TARİH","ÖDEME ŞEKLİ","POS CİHAZI BANKASI","KART TÜRÜ","TAKSİT","ÖDENEN TUTAR"]);
-    
-    let odemeRows = document.querySelectorAll('#odemeTable tbody tr');
-    for(let i=0; i<4; i++) {
-        if(odemeRows[i]) {
-            let cols = odemeRows[i].querySelectorAll('td');
-            if(cols.length >= 7) {
-                let tarih = cols[1].querySelector('input')?.value || "";
-                let tur = cols[2].querySelector('select')?.value || "";
-                let tutar = cols[6].querySelector('input')?.value || "";
-                if(tarih || tur || tutar) {
-                    ws_data.push([cols[0].innerText, tarih, tur, cols[3].querySelector('select')?.value||"", cols[4].querySelector('select')?.value||"", cols[5].querySelector('select')?.value||"", tutar]);
-                }
-            }
+  let odemeRows = document.querySelectorAll('#odemeTable tbody tr');
+  for(let i=0; i<4; i++) {
+    if(odemeRows[i]) {
+      let cols = odemeRows[i].querySelectorAll('td');
+      if(cols.length >= 7) {
+        let tarih = cols[1].querySelector('input')?.value || "";
+        let tur = cols[2].querySelector('select')?.value || "";
+        let tutar = cols[6].querySelector('input')?.value || "";
+        if(tarih || tur || tutar) {
+          ws_data.push([cols[0].innerText, tarih, tur,
+            cols[3].querySelector('select')?.value||"",
+            cols[4].querySelector('select')?.value||"",
+            cols[5].querySelector('select')?.value||"",
+            tutar]);
         }
+      }
     }
+  }
 
-    ws_data.push(["","","","","","KALAN BAKİYE:", document.getElementById('kalanBakiyeInp').value]);
+  ws_data.push(["","","","","","KALAN BAKİYE:", document.getElementById('kalanBakiyeInp').value]);
+  ws_data.push([]);
+
+  let not = document.querySelector('.ozel-not-kutusu').value;
+  if(not) { ws_data.push(["ÖZEL NOT:"]); ws_data.push([not]); }
+
+  let magaza = document.getElementById('magaza-adi-inp').value;
+  let danisman = document.getElementById('danisan-bilgi-inp').value;
+  if(magaza || danisman) {
     ws_data.push([]);
-    
-    let notKutusu = document.querySelector('.ozel-not-kutusu').value;
-    if(notKutusu) { ws_data.push(["ÖZEL NOT:"]); ws_data.push([notKutusu]); }
+    ws_data.push(["MAĞAZA:", magaza, "", "SATIŞ DANIŞMANI:", danisman]);
+  }
 
-    let magazaAdi = document.getElementById('magaza-adi-inp').value;
-    let danismanBilgi = document.getElementById('danisan-bilgi-inp').value;
-    if(magazaAdi || danismanBilgi) {
-        ws_data.push([]);
-        ws_data.push(["MAĞAZA:", magazaAdi, "", "SATIŞ DANIŞMANI:", danismanBilgi]);
-    }
-
-    var wb = XLSX.utils.book_new();
-    var ws = XLSX.utils.aoa_to_sheet(ws_data);
-    XLSX.utils.book_append_sheet(wb, ws, "Siparis_Formu");
-    XLSX.writeFile(wb, musteriAd.replace(/[/\\?%*:|"<>]/g,"") + " - " + formatliTarih + ".xlsx");
+  var wb = XLSX.utils.book_new();
+  var ws = XLSX.utils.aoa_to_sheet(ws_data);
+  XLSX.utils.book_append_sheet(wb, ws, "Siparis_Formu");
+  XLSX.writeFile(wb, musteriAd.replace(/[/\\?%*:|"<>]/g,"") + " - " + formatliTarih + ".xlsx");
 }
 
 window.onload = async function() {
@@ -470,28 +446,24 @@ window.onload = async function() {
     const excelFile = repoFiles.find(file => file.name.endsWith('.xlsx'));
     if (!excelFile) throw new Error("Klasörde Excel dosyası bulunamadı!");
 
-    const fileName = excelFile.name; 
-    const dateString = fileName.replace('.xlsx','').replace(/_/g,' '); 
-
+    const fileName = excelFile.name;
+    const dateString = fileName.replace('.xlsx','').replace(/_/g,' ');
     const response = await fetch('./' + fileName);
     if (!response.ok) throw new Error("Dosya içeriği okunamadı");
-    
+
     const buffer = await response.arrayBuffer();
     const w = XLSX.read(buffer, {type:'array'});
-    
+
     w.SheetNames.forEach(sheetName => {
-        const rows = XLSX.utils.sheet_to_json(w.Sheets[sheetName], {defval:""});
-        if(rows.length > 0) {
-            const keys = Object.keys(rows[0]);
-            const linkKey = keys.find(k => k.toUpperCase().includes("LİNK") || k.toUpperCase().includes("URL") || k.toUpperCase().includes("LINK"));
-            const codeKey = keys.find(k => k.toUpperCase().includes("NO") || k.toUpperCase().includes("KOD"));
-            if(linkKey && codeKey) {
-                rows.forEach(rw => {
-                    let c = fixString(rw[codeKey]);
-                    if(c && rw[linkKey]) linkMap[c] = rw[linkKey];
-                });
-            }
+      const rows = XLSX.utils.sheet_to_json(w.Sheets[sheetName], {defval:""});
+      if(rows.length > 0) {
+        const keys = Object.keys(rows[0]);
+        const linkKey = keys.find(k => k.toUpperCase().includes("LİNK")||k.toUpperCase().includes("URL")||k.toUpperCase().includes("LINK"));
+        const codeKey = keys.find(k => k.toUpperCase().includes("NO")||k.toUpperCase().includes("KOD"));
+        if(linkKey && codeKey) {
+          rows.forEach(rw => { let c=fixString(rw[codeKey]); if(c&&rw[linkKey]) linkMap[c]=rw[linkKey]; });
         }
+      }
     });
 
     const mainSheet = w.Sheets[w.SheetNames[0]];
@@ -506,15 +478,15 @@ window.onload = async function() {
       if (hU.includes("9") && hU.includes("TAKSİT")) return false;
       return true;
     });
-    
+
     let onlineIdx = heads.findIndex(h => h.toUpperCase().includes("ONLINE"));
     if(onlineIdx > -1) {
-        let onlineKey = heads.splice(onlineIdx, 1)[0];
-        let bipIdx = heads.findIndex(h => h.toUpperCase().includes("BİP")); 
-        if(bipIdx > -1) heads.splice(bipIdx, 0, onlineKey);
-        else heads.push(onlineKey);
+      let onlineKey = heads.splice(onlineIdx, 1)[0];
+      let bipIdx = heads.findIndex(h => h.toUpperCase().includes("BİP"));
+      if(bipIdx > -1) heads.splice(bipIdx, 0, onlineKey);
+      else heads.push(onlineKey);
     }
-    
+
     bipCol = heads.find(x => x.toUpperCase().includes("BİP"));
     phCol = heads.find(x => x.toUpperCase().includes("PHASE"));
     db = data;
@@ -524,8 +496,9 @@ window.onload = async function() {
     firstFooterIdx = heads.findIndex(h => isFooterCol(h.toUpperCase()));
     if (firstFooterIdx === -1) firstFooterIdx = priceStartIndex;
 
-    const linkCount = db.filter(row => { let code = fixString(row[heads[0]]); return code && linkMap[code]; }).length;
-    document.getElementById('statusMsg').innerText = `${dateString} (${linkCount} ürün için web sayfası bulundu. Ürünlerin isimlerine tıklayarak web sayfalarına ulaşabilirsiniz.)`;
+    const linkCount = db.filter(row => { let c=fixString(row[heads[0]]); return c && linkMap[c]; }).length;
+    document.getElementById('statusMsg').innerText =
+      `${dateString} (${linkCount} ürün için web sayfası bulundu. Ürünlerin isimlerine tıklayarak web sayfalarına ulaşabilirsiniz.)`;
     renderHeader();
   } catch (error) {
     document.getElementById('statusMsg').innerText = "Fiyat listesi yüklenemedi! (" + error.message + ")";
@@ -536,83 +509,80 @@ window.onload = async function() {
 const inp = document.getElementById('barcodeInp');
 
 inp.addEventListener("input", function(e) {
-    let a, b, val = this.value;
-    closeAllLists();
-    if (!val) return false;
-    currentFocus = -1;
-    a = document.createElement("DIV");
-    a.setAttribute("id", this.id + "autocomplete-list");
-    a.setAttribute("class", "autocomplete-items");
-    this.parentNode.appendChild(a);
-    let count = 0;
-    let searchStr = fixString(val);
-    for (let i = 0; i < db.length; i++) {
-        let code = db[i]["STOK KODU"] || db[i][heads[0]] || "";
-        let desc = db[i][heads[1]] || "";
-        let isStudio = desc.toLowerCase().includes("studioline");
-        let targetCol = isStudio ? heads[3] : heads[2];
-        let stokMiktari = targetCol && db[i][targetCol] !== undefined && db[i][targetCol] !== "" ? db[i][targetCol] : "0";
-        let displayColName = targetCol ? targetCol : "Stok";
-        if ((code && fixString(code).includes(searchStr)) || (desc && fixString(desc).includes(searchStr))) {
-            b = document.createElement("DIV");
-            b.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;width:100%;"><span><strong>${code}</strong> - ${desc}</span><span style="background:#e3f2fd;color:#007bff;border:1px solid #007bff;padding:4px 8px;border-radius:6px;font-weight:bold;font-size:13px;white-space:nowrap;margin-right:25px;">${displayColName} Stok: ${stokMiktari}</span></div>`;
-            b.innerHTML += `<input type="hidden" value="${code}">`;
-            b.addEventListener("click", function(e) {
-                let selectedCode = this.getElementsByTagName("input")[0].value;
-                let item = db.find(p => (p["STOK KODU"] || p[heads[0]]) === selectedCode);
-                if(item) cart.push({...item});
-                refreshTable();
-                inp.value = ""; closeAllLists(); inp.focus();
-            });
-            a.appendChild(b);
-            count++;
-            if (count >= 100) break; 
-        }
+  let a, b, val = this.value;
+  closeAllLists();
+  if (!val) return false;
+  currentFocus = -1;
+  a = document.createElement("DIV");
+  a.setAttribute("id", this.id + "autocomplete-list");
+  a.setAttribute("class", "autocomplete-items");
+  this.parentNode.appendChild(a);
+  let count = 0, searchStr = fixString(val);
+  for (let i = 0; i < db.length; i++) {
+    let code = db[i]["STOK KODU"] || db[i][heads[0]] || "";
+    let desc = db[i][heads[1]] || "";
+    let isStudio = desc.toLowerCase().includes("studioline");
+    let targetCol = isStudio ? heads[3] : heads[2];
+    let stokMiktari = targetCol && db[i][targetCol] !== undefined && db[i][targetCol] !== "" ? db[i][targetCol] : "0";
+    let displayColName = targetCol ? targetCol : "Stok";
+    if ((code && fixString(code).includes(searchStr)) || (desc && fixString(desc).includes(searchStr))) {
+      b = document.createElement("DIV");
+      b.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;width:100%;"><span><strong>${code}</strong> - ${desc}</span><span style="background:#e3f2fd;color:#007bff;border:1px solid #007bff;padding:4px 8px;border-radius:6px;font-weight:bold;font-size:13px;white-space:nowrap;margin-right:25px;">${displayColName} Stok: ${stokMiktari}</span></div>`;
+      b.innerHTML += `<input type="hidden" value="${code}">`;
+      b.addEventListener("click", function(e) {
+        let selectedCode = this.getElementsByTagName("input")[0].value;
+        let item = db.find(p => (p["STOK KODU"] || p[heads[0]]) === selectedCode);
+        if(item) cart.push({...item});
+        refreshTable(); inp.value = ""; closeAllLists(); inp.focus();
+      });
+      a.appendChild(b); count++;
+      if (count >= 100) break;
     }
+  }
 });
 
 inp.addEventListener("keydown", function(e) {
-    let x = document.getElementById(this.id + "autocomplete-list");
-    if (x) x = x.getElementsByTagName("div");
-    if (e.keyCode == 40) { currentFocus++; addActive(x); }
-    else if (e.keyCode == 38) { currentFocus--; addActive(x); }
-    else if (e.keyCode == 13) { 
-        e.preventDefault();
-        if (currentFocus > -1) { if (x) x[currentFocus].click(); }
-        else {
-            this.value.split(/[\s,]+/).forEach(v => {
-                let item = db.find(p => fixString(p["STOK KODU"] || p[heads[0]]) === fixString(v));
-                if(item) cart.push({...item});
-            });
-            refreshTable(); this.value = ""; closeAllLists();
-        }
+  let x = document.getElementById(this.id + "autocomplete-list");
+  if (x) x = x.getElementsByTagName("div");
+  if (e.keyCode == 40) { currentFocus++; addActive(x); }
+  else if (e.keyCode == 38) { currentFocus--; addActive(x); }
+  else if (e.keyCode == 13) {
+    e.preventDefault();
+    if (currentFocus > -1) { if (x) x[currentFocus].click(); }
+    else {
+      this.value.split(/[\s,]+/).forEach(v => {
+        let item = db.find(p => fixString(p["STOK KODU"] || p[heads[0]]) === fixString(v));
+        if(item) cart.push({...item});
+      });
+      refreshTable(); this.value = ""; closeAllLists();
     }
+  }
 });
 
 function addActive(x) {
-    if (!x) return false;
-    removeActive(x);
-    if (currentFocus >= x.length) currentFocus = 0;
-    if (currentFocus < 0) currentFocus = (x.length - 1);
-    x[currentFocus].classList.add("autocomplete-active");
+  if (!x) return false;
+  removeActive(x);
+  if (currentFocus >= x.length) currentFocus = 0;
+  if (currentFocus < 0) currentFocus = (x.length - 1);
+  x[currentFocus].classList.add("autocomplete-active");
 }
-function removeActive(x) { for (let i = 0; i < x.length; i++) x[i].classList.remove("autocomplete-active"); }
+function removeActive(x) { for (let i=0;i<x.length;i++) x[i].classList.remove("autocomplete-active"); }
 function closeAllLists(elmnt) {
-    let x = document.getElementsByClassName("autocomplete-items");
-    for (let i = 0; i < x.length; i++) {
-        if (elmnt != x[i] && elmnt != inp && x[i].parentNode) x[i].parentNode.removeChild(x[i]);
-    }
+  let x = document.getElementsByClassName("autocomplete-items");
+  for (let i=0;i<x.length;i++) {
+    if (elmnt != x[i] && elmnt != inp && x[i].parentNode) x[i].parentNode.removeChild(x[i]);
+  }
 }
-document.addEventListener("click", function (e) { closeAllLists(e.target); });
+document.addEventListener("click", function(e) { closeAllLists(e.target); });
 
-function removeItem(i) { 
-    cart.splice(i, 1); 
-    if (cart.length === 0) manualBundleVal = "";
-    refreshTable(); 
+function removeItem(i) {
+  cart.splice(i, 1);
+  if (cart.length === 0) manualBundleVal = "";
+  refreshTable();
 }
 
 function refreshTable() {
-  const bR = document.getElementById('bR'); 
+  const bR = document.getElementById('bR');
   bR.innerHTML = "";
   if (cart.length === 0) { manualBundleVal = ""; partialHavale=""; partialTek=""; }
 
@@ -621,11 +591,8 @@ function refreshTable() {
     let itemCode = fixString(item[heads[0]]);
     let descContent = heads[1] ? (linkMap[itemCode] ? `<a href="${linkMap[itemCode]}" target="_blank" class="p-link">${item[heads[1]]}</a>` : item[heads[1]]) : "";
     let cells = `<td><button class="btn-del" onclick="removeItem(${i})">SİL</button><br>${item[heads[0]]}</td>`;
-
     heads.slice(1).forEach((h, hIdx) => {
-      let v = item[h];
-      let colIndex = hIdx + 1;
-      let hT = h.toUpperCase();
+      let v = item[h], colIndex = hIdx + 1, hT = h.toUpperCase();
       if (hIdx === 0) { cells += `<td style="white-space:normal;">${descContent}</td>`; }
       else if (hT.includes("BEKLEYEN")) { cells += `<td>${v || '0'}</td>`; }
       else if (hT.includes("ONLINE")) { cells += `<td class="t-online-col">${v ? Math.ceil(v).toLocaleString('tr-TR') + ' ₺' : '-'}</td>`; }
@@ -634,8 +601,7 @@ function refreshTable() {
         else { cells += `<td>${v || '-'}</td>`; }
       }
     });
-
-    tr.innerHTML = cells; 
+    tr.innerHTML = cells;
     bR.appendChild(tr);
   });
   calc();
@@ -646,17 +612,15 @@ function calc() {
   if(cart.length === 0) { document.getElementById('fR').innerHTML = ""; return; }
   let t = { base:{}, disc:0 };
   let bVal = parseFloat(manualBundleVal) || 0;
-
   cart.forEach(p => {
     t.disc += (Math.ceil(p[bipCol])||0) + (Math.ceil(p[phCol])||0);
     heads.forEach((h, i) => { if(i >= priceStartIndex) t.base[i] = (t.base[i]||0) + (Math.ceil(parseFloat(p[h]))||0); });
   });
-
   document.getElementById('fR').innerHTML = `
-    <tr><td colspan="${firstFooterIdx}" class="f-title">TOPLAM LİSTE FİYATI</td>${renderCommonRow(t.base, 't-res')}</tr>
-    <tr><td colspan="${firstFooterIdx}" class="f-title">BİP İNDİRİMİ - (VARSA PHASE OUT)</td>${renderCommonRow(null, 't-res', t.disc)}</tr>
+    <tr><td colspan="${firstFooterIdx}" class="f-title">TOPLAM LİSTE FİYATI</td>${renderCommonRow(t.base,'t-res')}</tr>
+    <tr><td colspan="${firstFooterIdx}" class="f-title">BİP İNDİRİMİ - (VARSA PHASE OUT)</td>${renderCommonRow(null,'t-res',t.disc)}</tr>
     <tr><td colspan="${firstFooterIdx}" class="f-title" style="color:red;">TOPLAM BUNDLE HAK EDİŞİ</td>${renderBundleRow(bVal)}</tr>
-    <tr><td colspan="${firstFooterIdx}" class="f-title">SATILABİLİR MİNİMUM TUTAR</td>${renderFinalRow(t, bVal)}</tr>
+    <tr><td colspan="${firstFooterIdx}" class="f-title">SATILABİLİR MİNİMUM TUTAR</td>${renderFinalRow(t,bVal)}</tr>
     <tr><td colspan="${firstFooterIdx}" class="f-title" style="color:#6a0dad;">SATILABİLİR MİNİMUM TAKSİTLİ TUTAR</td>${renderTaksitliRow()}</tr>
   `;
 }
@@ -665,54 +629,45 @@ function isFooterCol(hT) {
   if (["HAKEDİŞ","ONLINE","PREMIUM","PHASE","BİP","TAKSİT"].some(k => hT.includes(k))) return false;
   return ["HAVALE","ÇEKİM"].some(k => hT.includes(k));
 }
-
 function renderCommonRow(data, cls, fixed) {
-  return heads.map((h, i) => {
+  return heads.map((h,i) => {
     if(i < firstFooterIdx) return "";
-    let hT = h.toUpperCase();
-    if (!isFooterCol(hT)) return "<td></td>";
-    let val = (fixed !== undefined) ? fixed : (data[i] || 0);
-    return `<td class="${cls}">${val > 0 ? val.toLocaleString('tr-TR') + ' ₺' : '-'}</td>`;
+    if (!isFooterCol(h.toUpperCase())) return "<td></td>";
+    let val = (fixed !== undefined) ? fixed : (data[i]||0);
+    return `<td class="${cls}">${val > 0 ? val.toLocaleString('tr-TR')+' ₺' : '-'}</td>`;
   }).join('');
 }
-
 function renderBundleRow(bVal) {
-  return heads.map((h, i) => {
+  return heads.map((h,i) => {
     if(i < firstFooterIdx) return "";
     let hT = h.toUpperCase();
     if (!isFooterCol(hT)) return "<td></td>";
-    if (hT.includes("HAVALE")) {
-      return `<td><input type="number" id="manualBundInp" placeholder="..Yazınız.." autocomplete="off" value="${manualBundleVal}" onkeydown="if(event.key==='Enter'){manualBundleVal=this.value;refreshTable();}" onblur="manualBundleVal=this.value;refreshTable();"></td>`;
-    }
-    return `<td style="color:red;white-space:normal;font-size:13px;">${bVal > 0 ? bVal.toLocaleString('tr-TR') + ' ₺' : '-'}</td>`;
+    if (hT.includes("HAVALE")) return `<td><input type="number" id="manualBundInp" placeholder="..Yazınız.." autocomplete="off" value="${manualBundleVal}" onkeydown="if(event.key==='Enter'){manualBundleVal=this.value;refreshTable();}" onblur="manualBundleVal=this.value;refreshTable();"></td>`;
+    return `<td style="color:red;white-space:normal;font-size:13px;">${bVal > 0 ? bVal.toLocaleString('tr-TR')+' ₺' : '-'}</td>`;
   }).join('');
 }
-
 function renderFinalRow(t, bVal) {
   finalTotals = {};
-  return heads.map((h, i) => {
+  return heads.map((h,i) => {
     if(i < firstFooterIdx) return "";
-    let hT = h.toUpperCase();
-    if (!isFooterCol(hT)) return "<td></td>";
-    let res = (t.base[i] || 0) - t.disc - bVal;
+    if (!isFooterCol(h.toUpperCase())) return "<td></td>";
+    let res = (t.base[i]||0) - t.disc - bVal;
     finalTotals[i] = res;
-    return `<td class="t-final">${res > 0 ? res.toLocaleString('tr-TR') + ' ₺' : '-'}</td>`;
+    return `<td class="t-final">${res > 0 ? res.toLocaleString('tr-TR')+' ₺' : '-'}</td>`;
   }).join('');
 }
-
 function renderTaksitliRow() {
   let havaleIdx = heads.findIndex(h => h.toUpperCase().includes("HAVALE"));
   let havaleVal = (havaleIdx > -1 && finalTotals[havaleIdx]) ? finalTotals[havaleIdx] : 0;
   let taksitVal = Math.ceil(havaleVal * 1.08);
-  return heads.map((h, i) => {
+  return heads.map((h,i) => {
     if(i < firstFooterIdx) return "";
     let hT = h.toUpperCase();
     if (!isFooterCol(hT)) return "<td></td>";
-    if (hT.includes("HAVALE")) return `<td style="background:#ede7f6;color:#4a148c;font-size:0.8vw;border:2px solid #7b1fa2 !important;font-weight:bold;white-space:nowrap;">${taksitVal > 0 ? taksitVal.toLocaleString('tr-TR') + ' ₺' : '-'}</td>`;
+    if (hT.includes("HAVALE")) return `<td style="background:#ede7f6;color:#4a148c;font-size:0.8vw;border:2px solid #7b1fa2 !important;font-weight:bold;white-space:nowrap;">${taksitVal > 0 ? taksitVal.toLocaleString('tr-TR')+' ₺' : '-'}</td>`;
     return `<td style="background:#ede7f6;"></td>`;
   }).join('');
 }
-
 function renderHeader() {
   document.getElementById('hR').innerHTML = "<tr>" + heads.map(h => `<th>${h.split(' ').join('<br>')}</th>`).join('') + "</tr>";
 }
@@ -722,38 +677,44 @@ function updateSiparisFormu() {
   tbody.innerHTML = '';
   if(cart.length === 0) { hesaplaBakiye(); }
 
+  // Ürün kodundan eklenen satırlar — marka default SİEMENS, seçilebilir
   cart.forEach((item, index) => {
     let code = item[heads[0]] || '';
     let desc = item[heads[1]] || '';
-    let brand = "SIEMENS";
-    if(desc.toLowerCase().includes("bosch")) brand = "BOSCH";
-    else if(desc.toLowerCase().includes("profilo")) brand = "PROFİLO";
-    
     let tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${index + 1}</td>
-      <td style="font-weight:bold;">${brand}</td>
+      <td style="padding:0;">${markaSelectHTML('SİEMENS')}</td>
       <td style="font-weight:bold;">${code}</td>
       <td title="${desc}">${desc}</td>
       <td><input type="number" class="form-input-cell" value="1" style="text-align:center;"></td>
-      <td><input type="text" class="form-input-cell urun-fiyat-inp" placeholder="TL" onfocus="this.value=this.value.replace(/[^0-9]/g,'');this.select();" onblur="let v=this.value.replace(/[^0-9]/g,'');if(v){this.value=parseInt(v).toLocaleString('tr-TR')+' ₺';}else{this.value='';}hesaplaBakiye();" onkeydown="fiyatEnterHandler.call(this,event);"></td>
+      <td><input type="text" class="form-input-cell urun-fiyat-inp" placeholder="TL"
+            onfocus="this.value=this.value.replace(/[^0-9]/g,'');this.select();"
+            onblur="let v=this.value.replace(/[^0-9]/g,'');if(v){this.value=parseInt(v).toLocaleString('tr-TR')+' ₺';}else{this.value='';}hesaplaBakiye();"
+            onkeydown="fiyatEnterHandler.call(this,event);"></td>
     `;
     tbody.appendChild(tr);
   });
-  
+
+  // Boş satırlar — marka seçilebilir, boş başlasın
+  const boslukMarkalar = ['','SİEMENS','SHAZA','CEPKASK','DİĞER'];
   for(let i = cart.length; i < Math.max(5, cart.length + 1); i++) {
+    let boslukOpts = boslukMarkalar.map(m => `<option value="${m}">${m}</option>`).join('');
     let tr = document.createElement('tr');
     tr.innerHTML = `
       <td style="height:20px;">${i + 1}</td>
-      <td><input type="text" class="form-input-cell"></td>
+      <td style="padding:0;"><select class="marka-select">${boslukOpts}</select></td>
       <td><input type="text" class="form-input-cell"></td>
       <td><input type="text" class="form-input-cell" style="text-align:left;"></td>
       <td><input type="number" class="form-input-cell" value="" style="text-align:center;"></td>
-      <td><input type="text" class="form-input-cell urun-fiyat-inp" placeholder="" onfocus="this.value=this.value.replace(/[^0-9]/g,'');this.select();" onblur="let v=this.value.replace(/[^0-9]/g,'');if(v){this.value=parseInt(v).toLocaleString('tr-TR')+' ₺';}else{this.value='';}hesaplaBakiye();" onkeydown="fiyatEnterHandler.call(this,event);"></td>
+      <td><input type="text" class="form-input-cell urun-fiyat-inp" placeholder=""
+            onfocus="this.value=this.value.replace(/[^0-9]/g,'');this.select();"
+            onblur="let v=this.value.replace(/[^0-9]/g,'');if(v){this.value=parseInt(v).toLocaleString('tr-TR')+' ₺';}else{this.value='';}hesaplaBakiye();"
+            onkeydown="fiyatEnterHandler.call(this,event);"></td>
     `;
     tbody.appendChild(tr);
   }
-  hesaplaBakiye(); 
+  hesaplaBakiye();
 }
 </script>
 </body>
