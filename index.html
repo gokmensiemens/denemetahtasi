@@ -390,7 +390,7 @@ function exportToExcel(){
   setCell(ws,r,3,cell('FATURA VE TESLİMAT BİLGİLERİ',true,LGRAY,BLACK,true,'center',10));
   merge(ws,r,3,r,6); r++;
 
-  // ── MÜŞTERİ / FATURA SATIR ÇİFTLERİ (Teslim alanı kaldırıldığı için Excel sırası düzenlendi) ──
+  // ── MÜŞTERİ / FATURA SATIR ÇİFTLERİ ─────────────────────────────────────
   const pairs=[
     ['Adı-Soyadı:',         musteriAd,          'Sözleşme Tarihi:',    formatliTarih],
     ['1. İletişim:',        fv('f_tel1'),        'Sevk/Montaj Tarihi:', sevkTarih],
@@ -701,29 +701,6 @@ function updateSiparisFormu(){
   }
   hesaplaBakiye();
 }
-
-// Yazdırmadan önce boş ödeme satırlarını gizle
-window.addEventListener('beforeprint', function() {
-    const odemeSatirlari = document.querySelectorAll('#odeme-tbody tr');
-    for(let i=0; i<4; i++) {
-        if(odemeSatirlari[i]) {
-            const odemeInp = odemeSatirlari[i].querySelector('.odeme-inp');
-            if(!odemeInp || odemeInp.value.trim() === '' || odemeInp.value.trim() === '0 ₺') {
-                odemeSatirlari[i].style.display = 'none';
-            }
-        }
-    }
-});
-
-// Yazdırma bittikten sonra gizlenen satırları ekrana geri getir
-window.addEventListener('afterprint', function() {
-    const odemeSatirlari = document.querySelectorAll('#odeme-tbody tr');
-    for(let i=0; i<4; i++) {
-        if(odemeSatirlari[i]) {
-            odemeSatirlari[i].style.display = '';
-        }
-    }
-});
 </script>
 </body>
 </html>
