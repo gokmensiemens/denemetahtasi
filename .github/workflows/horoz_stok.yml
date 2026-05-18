@@ -1,1 +1,38 @@
+name: Horoz Stok Güncelle
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  stok-guncelle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo'yu çek
+        uses: actions/checkout@v4
+
+      - name: Python kur
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Bağımlılıkları yükle
+        run: |
+          pip install playwright
+          playwright install chromium
+
+      - name: Stok çek
+        env:
+          HOROZ_KULLANICI: ${{ secrets.HOROZ_KULLANICI }}
+          HOROZ_SIFRE: ${{ secrets.HOROZ_SIFRE }}
+        run: python horoz_stok_actions.py
+
+      - name: stok.json'ı commit et
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add stok.json
+          git diff --staged --quiet || git commit -m "stok güncellendi"
+          git push
 
