@@ -1,105 +1,138 @@
-import os
 import json
 import time
+import traceback
 from playwright.sync_api import sync_playwright
 
-KULLANICI = os.environ["HOROZ_KULLANICI"]
-SIFRE = os.environ["HOROZ_SIFRE"]
+KULLANICI = "7000130623"
+SIFRE = "Gokmen2020.!"
+
+log_lines = []
+
+def log(msg):
+    print(msg)
+    log_lines.append(str(msg))
 
 def get_all_stok():
     stok = {}
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False, slow_mo=300)
         context = browser.new_context()
         page = context.new_page()
 
         # 1. Giriş
         page.goto("https://app3.horoz.com.tr/wsKurumsal/frmGiris.aspx", wait_until="networkidle", timeout=30000)
-        print(f"Login sayfası başlığı: {page.title()}")
-        page.fill("input[type='text']", KULLANICI)
-        page.fill("input[type='password']", SIFRE)
-        page.click("input[name='bntLogin']")
+        kullanici_input = page.locator("input[type='text']").first
+        kullanici_input.click()
+        time.sleep(0.5)
+        kullanici_input.type(KULLANICI, delay=100)
+        time.sleep(0.5)
+        page.keyboard.press("Tab")
+        time.sleep(0.3)
+        sifre_input = page.locator("input[type='password']").first
+        sifre_input.type(SIFRE, delay=100)
+        time.sleep(0.5)
+        btn = page.locator("#bntLogin")
+        box = btn.bounding_box()
+        page.mouse.click(box['x'] + box['width']/2, box['y'] + box['height']/2)
         page.wait_for_load_state("networkidle", timeout=30000)
-        print(f"Giriş sonrası URL: {page.url}")
-        print(f"Giriş sonrası başlık: {page.title()}")
-
-        # 2. app4'e geç — aynı context, cookie'ler taşınır
-        page.goto("https://app4.horoz.com.tr/wsEvTeslim/frmDefault.aspx", wait_until="networkidle", timeout=30000)
-        time.sleep(3)
-        print(f"app4 URL: {page.url}")
-        print(f"app4 başlık: {page.title()}")
-        
-        # Sayfadaki tüm span.x-panel-header-text elementlerini listele
-        spans = page.locator("span.x-panel-header-text").all_text_contents()
-        print(f"Menü başlıkları: {spans}")
-
-        # 3. "Ev Teslim Sorgular" accordion'unu aç
-        page.locator("span.x-panel-header-text", has_text="Ev Teslim Sorgular").click(timeout=15000)
-        time.sleep(1)
-
-        # 4. "Stok Sorgulama" menü öğesine tıkla
-        page.locator("span.x-menu-item-text", has_text="Stok Sorgulama").click(timeout=15000)
         time.sleep(2)
+        log(f"Giriş sonrası URL: {page.url}")
 
-        # 5. Listele'ye bas
-        page.locator("span.dx-vam", has_text="Listele").click(timeout=15000)
-        time.sleep(5)
-
-        # 6. Kayıt sayısını 500 yap
-        try:
-            page.locator(".dx-page-sizes .dx-selectbox").click()
-            time.sleep(1)
-            page.locator(".dx-list-item").filter(has_text="500").click()
-            time.sleep(4)
-        except Exception as e:
-            print(f"Kayıt sayısı ayarlanamadı: {e}")
-
-        # 7. Header sırasını bul
-        header_cells = page.locator(".dx-datagrid-headers .dx-header-row td").all_text_contents()
-        header_cells = [h.strip() for h in header_cells]
-        print(f"Headers: {header_cells}")
-
-        urun_kodu_idx = None
-        satilabilir_idx = None
-        for idx, h in enumerate(header_cells):
-            hu = h.upper().replace(" ", "")
-            if "URUNKODU" in hu or "ÜRÜNKODU" in hu:
-                urun_kodu_idx = idx
-            if "SATILABILIRMIKTAR" in hu:
-                satilabilir_idx = idx
-
-        print(f"Ürün kodu idx: {urun_kodu_idx}, Satılabilir idx: {satilabilir_idx}")
-
-        if urun_kodu_idx is None or satilabilir_idx is None:
-            print("HATA: Kolon bulunamadı!")
+        page_content = page.content()
+        if "frmChange" in page.url or ("frmGiris" in page.url and "Hoş Geldiniz" not in page_content):
+            log("Giriş başarısız!")
             browser.close()
             return stok
+        log("Giriş başarılı!")
 
-        # 8. Tüm satırları oku
-        rows = page.locator(".dx-datagrid-rowsview .dx-data-row").all()
-        print(f"Toplam satır: {len(rows)}")
+        # 2. app4
+        page.goto("https://app4.horoz.com.tr/wsEvTeslim/frmDefault.aspx", wait_until="networkidle", timeout=30000)
+        time.sleep(3)
 
-        for row in rows:
-            cells = row.locator("td").all_text_contents()
-            if len(cells) > max(urun_kodu_idx, satilabilir_idx):
-                kod = cells[urun_kodu_idx].strip()
-                miktar_str = cells[satilabilir_idx].strip()
-                if kod:
-                    try:
-                        stok[kod] = int(float(miktar_str)) if miktar_str else 0
-                    except:
-                        stok[kod] = 0
+        # 3. Ev Teslim Sorgular
+        page.locator("span.x-panel-header-text", has_text="Ev Teslim Sorgular").click(timeout=15000)
+        time.sleep(5)
+
+        # 4. Stok Sorgulama
+        page.locator("span.x-menu-item-text", has_text="Stok Sorgulama").click(timeout=15000)
+        log("Stok Sorgulama tıklandı")
+        time.sleep(3)
+        log(f"Tıklama sonrası frame'ler: {[f.url for f in page.frames]}")
+
+        # 5. frmStokSorgulama frame'i yüklenene kadar bekle
+        stok_frame = None
+        for _ in range(30):
+            time.sleep(1)
+            for frame in page.frames:
+                if "frmStokSorgulama" in frame.url:
+                    stok_frame = frame
+                    break
+            if stok_frame:
+                break
+
+        if stok_frame is None:
+            log("HATA: Stok frame bulunamadı!")
+            browser.close()
+            return stok
+        log(f"Stok frame: {stok_frame.url}")
+
+        # 6. Listele
+        stok_frame.locator("span.dx-vam", has_text="Listele").click(timeout=15000)
+        log("Listele tıklandı")
+        time.sleep(8)
+
+        # 7. Kayıt sayısı 500
+        try:
+            stok_frame.locator(".dxp-dropDownButton").click(timeout=10000)
+            time.sleep(1)
+            stok_frame.locator("span.dx-vam", has_text="500").click(timeout=10000)
+            log("Kayıt sayısı 500 tıklandı")
+            time.sleep(8)
+        except Exception as e:
+            log(f"Kayıt sayısı ayarlanamadı: {e}")
+
+        # 8. JS ile tüm satırları oku — class: dx-nowrap dxgv
+        log("Satırlar okunuyor...")
+        result = stok_frame.evaluate("""
+            () => {
+                const rows = document.querySelectorAll('tr.dxgvDataRow_Office2010Blue');
+                const data = [];
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td.dxgv');
+                    if (cells.length > 5) {
+                        const kod = cells[2].textContent.trim();
+                        const stok = cells[5].textContent.trim();
+                        if (kod) data.push([kod, stok]);
+                    }
+                });
+                return data;
+            }
+        """)
+        log(f"JS sonucu örnek: {result[:3] if result else 'boş'}")
+        log(f"Toplam satır: {len(result)}")
+
+        for kod, miktar_str in result:
+            try:
+                stok[kod] = int(float(miktar_str.replace(',', '.'))) if miktar_str else 0
+            except:
+                stok[kod] = 0
 
         browser.close()
     return stok
 
 if __name__ == "__main__":
-    print("Horoz stok sorgulanıyor...")
-    stok = get_all_stok()
-    print(f"{len(stok)} ürün bulundu.")
-
-    with open("stok.json", "w", encoding="utf-8") as f:
-        json.dump(stok, f, ensure_ascii=False, indent=2)
-
-    print("stok.json yazıldı.")
-    print(json.dumps(stok, ensure_ascii=False, indent=2)[:500])
+    try:
+        log("Horoz stok sorgulanıyor...")
+        stok = get_all_stok()
+        log(f"{len(stok)} ürün bulundu.")
+        with open("stok.json", "w", encoding="utf-8") as f:
+            json.dump(stok, f, ensure_ascii=False, indent=2)
+        log("stok.json yazıldı.")
+        log(json.dumps(stok, ensure_ascii=False, indent=2)[:500])
+    except Exception as e:
+        log(f"HATA: {e}")
+        log(traceback.format_exc())
+    finally:
+        with open("horoz_log.txt", "w", encoding="utf-8") as f:
+            f.write("\n".join(log_lines))
+        print("Log yazıldı.")
