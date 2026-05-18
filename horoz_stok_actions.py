@@ -21,19 +21,28 @@ def get_all_stok():
         page = context.new_page()
 
         # 1. Giriş
-        page.goto("https://app3.horoz.com.tr/wsKurumsal/frmGiris.aspx", wait_until="networkidle", timeout=30000)
-        # JS ile kullanıcı adı ve şifreyi set et, sonra butona tıkla
-        page.evaluate(f"""
-            var kullanici = document.querySelector("input[type='text']");
-            var sifre = document.querySelector("input[type='password']");
-            kullanici.value = arguments[0];
-            kullanici.dispatchEvent(new Event('change', {{bubbles: true}}));
-            sifre.value = arguments[1];
-            sifre.dispatchEvent(new Event('change', {{bubbles: true}}));
-            sifre.dispatchEvent(new Event('input', {{bubbles: true}}));
-        """, KULLANICI, SIFRE)
+        page.goto("https://app3.horoz.com.tr/wsKurumsal/frmGiris.aspx", wait_until="load", timeout=30000)
+        # Kullanıcı adı
+        kullanici_input = page.locator("input[type='text']").first
+        kullanici_input.click()
+        time.sleep(0.3)
+        kullanici_input.fill(KULLANICI)
+        time.sleep(0.5)
+
+        # Şifre — tab ile geç
+        page.keyboard.press("Tab")
+        time.sleep(0.5)
+        sifre_input = page.locator("input[type='password']").first
+        sifre_input.fill(SIFRE)
+        time.sleep(2)
+        # Tekrar fill — temizlenmiş olabilir
+        sifre_input.fill(SIFRE)
         time.sleep(1)
-        page.evaluate("document.getElementById('bntLogin').click()")
+
+        # Tab sonra Enter
+        page.keyboard.press("Tab")
+        time.sleep(0.5)
+        page.keyboard.press("Enter")
         page.wait_for_load_state("networkidle", timeout=30000)
         time.sleep(2)
         log(f"Giriş sonrası URL: {page.url}")
@@ -46,7 +55,7 @@ def get_all_stok():
         log("Giriş başarılı!")
 
         # 2. app4
-        page.goto("https://app4.horoz.com.tr/wsEvTeslim/frmDefault.aspx", wait_until="networkidle", timeout=30000)
+        page.goto("https://app4.horoz.com.tr/wsEvTeslim/frmDefault.aspx", wait_until="load", timeout=30000)
         time.sleep(3)
 
         # 3. Ev Teslim Sorgular
