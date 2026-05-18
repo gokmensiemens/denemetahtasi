@@ -63,10 +63,13 @@ def get_all_stok():
         log("Ev Teslim Sorgular tıklandı")
         time.sleep(8)
 
-        # 4. Stok Sorgulama
-        page.locator("span.x-menu-item-text", has_text="Stok Sorgulama").click(timeout=15000)
+        # 4. Stok Sorgulama — visible olana kadar bekle sonra tıkla
+        stok_menu = page.locator("span.x-menu-item-text", has_text="Stok Sorgulama")
+        stok_menu.wait_for(state="visible", timeout=15000)
+        log("Stok Sorgulama menüsü görünür")
+        stok_menu.click(timeout=15000)
         log("Stok Sorgulama tıklandı")
-        time.sleep(8)
+        time.sleep(10)
         log(f"Frame'ler: {[f.url for f in page.frames]}")
 
         # 5. frmStokSorgulama frame'i yüklenene kadar bekle
