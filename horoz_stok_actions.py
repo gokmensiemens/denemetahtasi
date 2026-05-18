@@ -10,32 +10,42 @@ def get_all_stok():
     stok = {}
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+        context = browser.new_context()
+        page = context.new_page()
 
         # 1. Giriş
         page.goto("https://app3.horoz.com.tr/wsKurumsal/frmGiris.aspx", wait_until="networkidle", timeout=30000)
+        print(f"Login sayfası başlığı: {page.title()}")
         page.fill("input[type='text']", KULLANICI)
         page.fill("input[type='password']", SIFRE)
-        page.click("input[type='submit'], button:has-text('Giriş yap')")
+        page.click("input[name='bntLogin']")
         page.wait_for_load_state("networkidle", timeout=30000)
+        print(f"Giriş sonrası URL: {page.url}")
+        print(f"Giriş sonrası başlık: {page.title()}")
 
-        # 2. Stok Sorgulama sayfasına geç
+        # 2. app4'e geç — aynı context, cookie'ler taşınır
         page.goto("https://app4.horoz.com.tr/wsEvTeslim/frmDefault.aspx", wait_until="networkidle", timeout=30000)
-        time.sleep(2)
+        time.sleep(3)
+        print(f"app4 URL: {page.url}")
+        print(f"app4 başlık: {page.title()}")
+        
+        # Sayfadaki tüm span.x-panel-header-text elementlerini listele
+        spans = page.locator("span.x-panel-header-text").all_text_contents()
+        print(f"Menü başlıkları: {spans}")
 
-        # 3. "Ev Teslim Sorgular" accordion'unu aç — ID dinamik, text ile bul
-        page.locator("span.x-panel-header-text", has_text="Ev Teslim Sorgular").click()
+        # 3. "Ev Teslim Sorgular" accordion'unu aç
+        page.locator("span.x-panel-header-text", has_text="Ev Teslim Sorgular").click(timeout=15000)
         time.sleep(1)
 
         # 4. "Stok Sorgulama" menü öğesine tıkla
-        page.locator("span.x-menu-item-text", has_text="Stok Sorgulama").click()
+        page.locator("span.x-menu-item-text", has_text="Stok Sorgulama").click(timeout=15000)
         time.sleep(2)
 
-        # 5. Listele'ye bas (kayıt sayısı ayarından ÖNCE listele, sonra dropdown çıkar)
-        page.locator("span.dx-vam", has_text="Listele").click()
+        # 5. Listele'ye bas
+        page.locator("span.dx-vam", has_text="Listele").click(timeout=15000)
         time.sleep(5)
 
-        # 6. Kayıt sayısını 500 yap — grid yüklendikten sonra DevExtreme selectbox'tan seç
+        # 6. Kayıt sayısını 500 yap
         try:
             page.locator(".dx-page-sizes .dx-selectbox").click()
             time.sleep(1)
@@ -47,7 +57,6 @@ def get_all_stok():
         # 7. Header sırasını bul
         header_cells = page.locator(".dx-datagrid-headers .dx-header-row td").all_text_contents()
         header_cells = [h.strip() for h in header_cells]
-
         print(f"Headers: {header_cells}")
 
         urun_kodu_idx = None
