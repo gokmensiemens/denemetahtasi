@@ -44,16 +44,21 @@
     .p-link { color: #007bff !important; text-decoration: underline !important; font-weight: bold; cursor: pointer; display: block; white-space: normal; }
     .t-online-col { background: #eceff1; color: #455a64; font-weight: bold; }
     /* Canlı stok */
-    .stok-canli-btn { background: none; border: none; cursor: pointer; font-size: 9px; color: #aaa; padding: 0; margin-top: 2px; display: block; width: 100%; }
-    .stok-canli-btn:hover { color: #007bff; }
     .stok-canli { color: #155724 !important; background: #d4edda; border-radius: 3px; padding: 0 2px; }
     .stok-sifir  { color: #721c24 !important; background: #f8d7da; border-radius: 3px; padding: 0 2px; }
+    #btnCanliStok { background: #9C1936; color: white; border: none; border-radius: 6px; padding: 6px 16px; font-size: 12px; font-weight: bold; cursor: pointer; white-space: nowrap; }
+    #btnCanliStok:hover { background: #7a1229; }
+    #stokGuncelMsg { font-size: 11px; color: #888; margin-left: 8px; }
   </style>
 </head>
 <body>
 <div class="card">
-  <div style="margin-bottom:10px; font-size:12px;">
-    <b>FİYAT LİSTESİ YÜKLENDİ:</b> <span id="statusMsg" style="font-weight:bold; color:#007bff;">Liste Yükleniyor, lütfen bekleyin...</span>
+  <div style="margin-bottom:10px; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+    <div><b>FİYAT LİSTESİ YÜKLENDİ:</b> <span id="statusMsg" style="font-weight:bold; color:#007bff;">Liste Yükleniyor, lütfen bekleyin...</span></div>
+    <div style="display:flex; align-items:center;">
+      <button id="btnCanliStok" onclick="canliStokTumunuGuncelle()">🔄 Horoz Lojistik'ten Güncel Stok Getir</button>
+      <span id="stokGuncelMsg"></span>
+    </div>
   </div>
   <div class="search-container">
     <div class="autocomplete-wrapper">
@@ -291,22 +296,44 @@ function removeItem(i) {
     refreshTable();
 }
 
-function canliStokGoster(urunKodu) {
-  let canli = window._stokJson && window._stokJson[urunKodu];
-  let span = document.getElementById('stok-val-' + urunKodu);
-  if (!span) return;
-  if (canli === undefined || canli === null) {
-    span.textContent = '?';
-    span.className = 'stok-sifir';
-  } else if (canli === 0) {
-    span.textContent = '0';
-    span.className = 'stok-sifir';
-  } else {
-    span.textContent = canli;
-    span.className = 'stok-canli';
+async function canliStokTumunuGuncelle() {
+  let btn = document.getElementById('btnCanliStok');
+  let msg = document.getElementById('stokGuncelMsg');
+  btn.disabled = true;
+  msg.textContent = '⏳ Yükleniyor...';
+
+  try {
+    let res = await fetch('./stok.json?_=' + Date.now());
+    if (!res.ok) throw new Error('stok.json bulunamadı');
+    window._stokJson = await res.json();
+  } catch(e) {
+    msg.textContent = '❌ Stok verisi alınamadı';
+    btn.disabled = false;
+    return;
   }
-  let btn = span.nextElementSibling;
-  if (btn) btn.style.display = 'none';
+
+  let guncellenen = 0;
+  cart.forEach(item => {
+    let urunKodu = item[heads[0]] || '';
+    let span = document.getElementById('stok-val-' + urunKodu);
+    if (!span) return;
+    let canli = window._stokJson[urunKodu];
+    if (canli === undefined || canli === null) {
+      span.textContent = '?';
+      span.className = 'stok-sifir';
+    } else if (canli === 0) {
+      span.textContent = '0';
+      span.className = 'stok-sifir';
+    } else {
+      span.textContent = canli;
+      span.className = 'stok-canli';
+    }
+    guncellenen++;
+  });
+
+  let simdi = new Date().toLocaleTimeString('tr-TR');
+  msg.textContent = `✅ ${guncellenen} ürün güncellendi (${simdi})`;
+  btn.disabled = false;
 }
 
 function refreshTable() {
@@ -344,7 +371,6 @@ function refreshTable() {
         let excelStok = (v !== undefined && v !== "") ? v : '0';
         cells += `<td>
           <span id="stok-val-${urunKodu}">${excelStok}</span>
-          <button class="stok-canli-btn" onclick="canliStokGoster('${urunKodu}')">🔄 canlı stok</button>
         </td>`;
       } else if (hT.includes("BEKLEYEN")) {
         cells += `<td>${v || '0'}</td>`;
