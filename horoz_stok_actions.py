@@ -31,8 +31,6 @@ def get_all_stok():
         time.sleep(0.5)
         sifre_input = page.locator("input[type='password']").first
         sifre_input.fill(SIFRE)
-        time.sleep(2)
-        sifre_input.fill(SIFRE)
         time.sleep(1)
         page.keyboard.press("Tab")
         time.sleep(0.5)
