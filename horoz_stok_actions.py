@@ -32,9 +32,7 @@ def get_all_stok():
         sifre_input = page.locator("input[type='password']").first
         sifre_input.type(SIFRE, delay=100)
         time.sleep(0.5)
-        btn = page.locator("#bntLogin")
-        box = btn.bounding_box()
-        page.mouse.click(box['x'] + box['width']/2, box['y'] + box['height']/2)
+        page.evaluate("document.getElementById('bntLogin').click()")
         page.wait_for_load_state("networkidle", timeout=30000)
         time.sleep(2)
         log(f"Giriş sonrası URL: {page.url}")
