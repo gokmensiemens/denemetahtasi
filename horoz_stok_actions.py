@@ -23,12 +23,12 @@ def get_all_stok():
         page.goto("https://app4.horoz.com.tr/wsEvTeslim/frmDefault.aspx", wait_until="networkidle", timeout=30000)
         time.sleep(2)
 
-        # 3. "Ev Teslim Sorgular" accordion'unu aç
-        page.click("#ext-gen103")
+        # 3. "Ev Teslim Sorgular" accordion'unu aç — ID dinamik, text ile bul
+        page.locator("span.x-panel-header-text", has_text="Ev Teslim Sorgular").click()
         time.sleep(1)
 
         # 4. "Stok Sorgulama" menü öğesine tıkla
-        page.click("span.x-menu-item-text:has-text('Stok Sorgulama')")
+        page.locator("span.x-menu-item-text", has_text="Stok Sorgulama").click()
         time.sleep(2)
 
         # 5. Kayıt sayısını 500 yap
