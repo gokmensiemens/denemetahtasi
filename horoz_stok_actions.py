@@ -22,33 +22,31 @@ def get_all_stok():
 
         # 1. Giriş
         page.goto("https://app3.horoz.com.tr/wsKurumsal/frmGiris.aspx", wait_until="load", timeout=30000)
-        # Kullanıcı adı
         kullanici_input = page.locator("input[type='text']").first
         kullanici_input.click()
         time.sleep(0.3)
         kullanici_input.fill(KULLANICI)
         time.sleep(0.5)
-
-        # Şifre — tab ile geç
         page.keyboard.press("Tab")
         time.sleep(0.5)
         sifre_input = page.locator("input[type='password']").first
         sifre_input.fill(SIFRE)
         time.sleep(2)
-        # Tekrar fill — temizlenmiş olabilir
         sifre_input.fill(SIFRE)
         time.sleep(1)
-
-        # Tab sonra Enter
         page.keyboard.press("Tab")
         time.sleep(0.5)
         page.keyboard.press("Enter")
-        page.wait_for_load_state("networkidle", timeout=30000)
-        time.sleep(2)
+        page.wait_for_load_state("load", timeout=30000)
+        time.sleep(4)
         log(f"Giriş sonrası URL: {page.url}")
 
-        page_content = page.content()
-        if "frmChange" in page.url or ("frmGiris" in page.url and "Hoş Geldiniz" not in page_content):
+        # Giriş kontrolü — sadece URL'e bak
+        if "frmChange" in page.url:
+            log("Şifre değiştirme sayfası!")
+            browser.close()
+            return stok
+        if "frmGiris" in page.url:
             log("Giriş başarısız!")
             browser.close()
             return stok
@@ -63,7 +61,7 @@ def get_all_stok():
         log("Ev Teslim Sorgular tıklandı")
         time.sleep(8)
 
-        # 4. Stok Sorgulama — visible olana kadar bekle sonra tıkla
+        # 4. Stok Sorgulama
         stok_menu = page.locator("span.x-menu-item-text", has_text="Stok Sorgulama")
         stok_menu.wait_for(state="visible", timeout=15000)
         log("Stok Sorgulama menüsü görünür")
