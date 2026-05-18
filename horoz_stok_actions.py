@@ -22,19 +22,13 @@ def get_all_stok():
 
         # 1. Giriş
         page.goto("https://app3.horoz.com.tr/wsKurumsal/frmGiris.aspx", wait_until="load", timeout=30000)
-        kullanici_input = page.locator("input[type='text']").first
-        kullanici_input.click()
-        time.sleep(0.3)
-        kullanici_input.fill(KULLANICI)
-        time.sleep(0.5)
-        page.keyboard.press("Tab")
-        time.sleep(0.5)
-        sifre_input = page.locator("input[type='password']").first
-        sifre_input.fill(SIFRE)
+        # JS ile form doldur — headless'ta en güvenilir yol
+        page.evaluate(f"""
+            document.querySelector("input[type='text']").value = '{KULLANICI}';
+            document.querySelector("input[type='password']").value = '{SIFRE}';
+        """)
         time.sleep(1)
-        page.keyboard.press("Tab")
-        time.sleep(0.5)
-        page.keyboard.press("Enter")
+        page.evaluate("document.getElementById('bntLogin').click()")
         page.wait_for_load_state("load", timeout=30000)
         time.sleep(4)
         log(f"Giriş sonrası URL: {page.url}")
