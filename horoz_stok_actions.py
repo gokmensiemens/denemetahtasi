@@ -1,10 +1,11 @@
+import os
 import json
 import time
 import traceback
 from playwright.sync_api import sync_playwright
 
-KULLANICI = "7000130623"
-SIFRE = "Gokmen2020.!"
+KULLANICI = os.environ["HOROZ_KULLANICI"]
+SIFRE = os.environ["HOROZ_SIFRE"]
 
 log_lines = []
 
@@ -15,7 +16,7 @@ def log(msg):
 def get_all_stok():
     stok = {}
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False, slow_mo=300)
+        browser = p.chromium.launch(headless=True, slow_mo=0)
         context = browser.new_context()
         page = context.new_page()
 
@@ -57,7 +58,6 @@ def get_all_stok():
         page.locator("span.x-menu-item-text", has_text="Stok Sorgulama").click(timeout=15000)
         log("Stok Sorgulama tıklandı")
         time.sleep(3)
-        log(f"Tıklama sonrası frame'ler: {[f.url for f in page.frames]}")
 
         # 5. frmStokSorgulama frame'i yüklenene kadar bekle
         stok_frame = None
@@ -91,7 +91,7 @@ def get_all_stok():
         except Exception as e:
             log(f"Kayıt sayısı ayarlanamadı: {e}")
 
-        # 8. JS ile tüm satırları oku — class: dx-nowrap dxgv
+        # 8. JS ile tüm satırları oku
         log("Satırlar okunuyor...")
         result = stok_frame.evaluate("""
             () => {
@@ -108,7 +108,6 @@ def get_all_stok():
                 return data;
             }
         """)
-        log(f"JS sonucu örnek: {result[:3] if result else 'boş'}")
         log(f"Toplam satır: {len(result)}")
 
         for kod, miktar_str in result:
@@ -128,11 +127,8 @@ if __name__ == "__main__":
         with open("stok.json", "w", encoding="utf-8") as f:
             json.dump(stok, f, ensure_ascii=False, indent=2)
         log("stok.json yazıldı.")
-        log(json.dumps(stok, ensure_ascii=False, indent=2)[:500])
     except Exception as e:
         log(f"HATA: {e}")
         log(traceback.format_exc())
     finally:
-        with open("horoz_log.txt", "w", encoding="utf-8") as f:
-            f.write("\n".join(log_lines))
-        print("Log yazıldı.")
+        print("\n".join(log_lines))
