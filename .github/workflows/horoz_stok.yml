@@ -5,6 +5,9 @@ on:
     - cron: '*/5 * * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   stok-guncelle:
     runs-on: ubuntu-latest
@@ -35,4 +38,3 @@ jobs:
           git add stok.json
           git diff --staged --quiet || git commit -m "stok güncellendi"
           git push
-
