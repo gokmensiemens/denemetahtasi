@@ -22,25 +22,18 @@ def get_all_stok():
 
         # 1. Giriş
         page.goto("https://app3.horoz.com.tr/wsKurumsal/frmGiris.aspx", wait_until="networkidle", timeout=30000)
-        # Kullanıcı adı
-        kullanici_input = page.locator("input[type='text']").first
-        kullanici_input.click()
-        time.sleep(0.5)
-        kullanici_input.type(KULLANICI, delay=80)
-        time.sleep(0.5)
-
-        # Şifre — tab ile geç, yaz, bekle, tekrar yaz, enter
-        page.keyboard.press("Tab")
-        time.sleep(0.5)
-        sifre_input = page.locator("input[type='password']").first
-        sifre_input.type(SIFRE, delay=80)
-        time.sleep(2)
-        sifre_input.click(click_count=3)
-        sifre_input.type(SIFRE, delay=80)
+        # JS ile kullanıcı adı ve şifreyi set et, sonra butona tıkla
+        page.evaluate(f"""
+            var kullanici = document.querySelector("input[type='text']");
+            var sifre = document.querySelector("input[type='password']");
+            kullanici.value = arguments[0];
+            kullanici.dispatchEvent(new Event('change', {{bubbles: true}}));
+            sifre.value = arguments[1];
+            sifre.dispatchEvent(new Event('change', {{bubbles: true}}));
+            sifre.dispatchEvent(new Event('input', {{bubbles: true}}));
+        """, KULLANICI, SIFRE)
         time.sleep(1)
-        page.keyboard.press("Tab")
-        time.sleep(0.5)
-        page.keyboard.press("Enter")
+        page.evaluate("document.getElementById('bntLogin').click()")
         page.wait_for_load_state("networkidle", timeout=30000)
         time.sleep(2)
         log(f"Giriş sonrası URL: {page.url}")
