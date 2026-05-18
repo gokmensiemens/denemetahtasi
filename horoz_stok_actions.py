@@ -31,30 +31,25 @@ def get_all_stok():
         page.locator("span.x-menu-item-text", has_text="Stok Sorgulama").click()
         time.sleep(2)
 
-        # 5. Kayıt sayısını 500 yap
-        try:
-            sayfa_basi = page.locator("input.dx-texteditor-input[aria-label], .dx-page-sizes input").last
-            sayfa_basi.triple_click()
-            sayfa_basi.type("500")
-            time.sleep(500)
-        except:
-            pass
-
-        # 6. Listele'ye bas
-        page.click("span.dx-vam:has-text('Listele')")
+        # 5. Listele'ye bas (kayıt sayısı ayarından ÖNCE listele, sonra dropdown çıkar)
+        page.locator("span.dx-vam", has_text="Listele").click()
         time.sleep(5)
 
-        # 7. Sayfa başına 500 seç (dropdown)
+        # 6. Kayıt sayısını 500 yap — grid yüklendikten sonra DevExtreme selectbox'tan seç
         try:
-            page.select_option(".dx-page-sizes select", "500")
-            time.sleep(3)
-        except:
-            pass
+            page.locator(".dx-page-sizes .dx-selectbox").click()
+            time.sleep(1)
+            page.locator(".dx-list-item").filter(has_text="500").click()
+            time.sleep(4)
+        except Exception as e:
+            print(f"Kayıt sayısı ayarlanamadı: {e}")
 
-        # 8. Header sırasını bul
+        # 7. Header sırasını bul
         header_cells = page.locator(".dx-datagrid-headers .dx-header-row td").all_text_contents()
         header_cells = [h.strip() for h in header_cells]
-        
+
+        print(f"Headers: {header_cells}")
+
         urun_kodu_idx = None
         satilabilir_idx = None
         for idx, h in enumerate(header_cells):
@@ -64,7 +59,6 @@ def get_all_stok():
             if "SATILABILIRMIKTAR" in hu:
                 satilabilir_idx = idx
 
-        print(f"Headers: {header_cells}")
         print(f"Ürün kodu idx: {urun_kodu_idx}, Satılabilir idx: {satilabilir_idx}")
 
         if urun_kodu_idx is None or satilabilir_idx is None:
@@ -72,7 +66,7 @@ def get_all_stok():
             browser.close()
             return stok
 
-        # 9. Tüm satırları oku
+        # 8. Tüm satırları oku
         rows = page.locator(".dx-datagrid-rowsview .dx-data-row").all()
         print(f"Toplam satır: {len(rows)}")
 
@@ -94,9 +88,9 @@ if __name__ == "__main__":
     print("Horoz stok sorgulanıyor...")
     stok = get_all_stok()
     print(f"{len(stok)} ürün bulundu.")
-    
+
     with open("stok.json", "w", encoding="utf-8") as f:
         json.dump(stok, f, ensure_ascii=False, indent=2)
-    
+
     print("stok.json yazıldı.")
     print(json.dumps(stok, ensure_ascii=False, indent=2)[:500])
