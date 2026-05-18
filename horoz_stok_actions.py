@@ -35,7 +35,7 @@ def get_all_stok():
         sifre_input = page.locator("input[type='password']").first
         sifre_input.type(SIFRE, delay=80)
         time.sleep(2)
-        sifre_input.triple_click()
+        sifre_input.click(click_count=3)
         sifre_input.type(SIFRE, delay=80)
         time.sleep(1)
         page.keyboard.press("Tab")
