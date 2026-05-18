@@ -34,7 +34,6 @@
     th:nth-child(15), td:nth-child(15) { white-space: normal !important; line-height: 1.2; }
     td.wrap-col { white-space: normal !important; line-height: 1.3; font-size: 0.65vw; }
     th.wrap-col { white-space: normal !important; line-height: 1.3; }
-
     .btn-del { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; margin-bottom: 5px; font-weight: bold; }
     .f-title { text-align: right; padding-right: 15px; background: #f1f3f5; font-weight: bold; font-size: 0.75vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .t-res { background: #e3f2fd; white-space: nowrap; }
@@ -44,6 +43,11 @@
     .t-partial { background: #fff3e0; color: #bf360c; font-weight: bold; font-size: 15px; }
     .p-link { color: #007bff !important; text-decoration: underline !important; font-weight: bold; cursor: pointer; display: block; white-space: normal; }
     .t-online-col { background: #eceff1; color: #455a64; font-weight: bold; }
+    /* Canlı stok */
+    .stok-canli-btn { background: none; border: none; cursor: pointer; font-size: 9px; color: #aaa; padding: 0; margin-top: 2px; display: block; width: 100%; }
+    .stok-canli-btn:hover { color: #007bff; }
+    .stok-canli { color: #155724 !important; background: #d4edda; border-radius: 3px; padding: 0 2px; }
+    .stok-sifir  { color: #721c24 !important; background: #f8d7da; border-radius: 3px; padding: 0 2px; }
   </style>
 </head>
 <body>
@@ -68,10 +72,10 @@
 let db = [], cart = [], heads = [], manualBundleVal = "";
 let partialHavale = "", partialTek = "", finalTotals = {};
 let bipCol = "", phCol = "";
-let linkMap = {}; 
+let linkMap = {};
 let currentFocus = -1;
 let priceStartIndex = 13;
-let firstFooterIdx = 13; 
+let firstFooterIdx = 13;
 
 const fixString = (str) => !str ? "" : String(str)
   .replace(/İ/g, 'i')
@@ -93,6 +97,12 @@ function fullReset() {
 }
 
 window.onload = async function() {
+  // stok.json'ı önceden yükle
+  fetch('./stok.json?_=' + Date.now())
+    .then(r => r.ok ? r.json() : {})
+    .then(d => { window._stokJson = d; })
+    .catch(() => { window._stokJson = {}; });
+
   try {
     const repoResponse = await fetch('https://api.github.com/repos/gokmensiemens/siemensfiyatkontrol/contents/');
     if (!repoResponse.ok) throw new Error("GitHub deposuna ulaşılamadı");
@@ -101,15 +111,15 @@ window.onload = async function() {
     const excelFile = repoFiles.find(file => file.name.endsWith('.xlsx'));
     if (!excelFile) throw new Error("Klasörde Excel dosyası bulunamadı!");
 
-    const fileName = excelFile.name; 
-    const dateString = fileName.replace('.xlsx', '').replace(/_/g, ' '); 
+    const fileName = excelFile.name;
+    const dateString = fileName.replace('.xlsx', '').replace(/_/g, ' ');
 
     const response = await fetch('./' + fileName);
     if (!response.ok) throw new Error("Dosya içeriği okunamadı");
-    
+
     const buffer = await response.arrayBuffer();
     const w = XLSX.read(buffer, {type:'array'});
-    
+
     w.SheetNames.forEach(sheetName => {
         const rows = XLSX.utils.sheet_to_json(w.Sheets[sheetName], {defval:""});
         if(rows.length > 0) {
@@ -137,12 +147,12 @@ window.onload = async function() {
       if (/^9\s*TAKSİT/i.test(hU)) return false;
       return true;
     });
-    
+
     // 1. ONLINE sütununu taşı
     let onlineIdx = heads.findIndex(h => h.toUpperCase().includes("ONLINE"));
     if(onlineIdx > -1) {
         let onlineKey = heads.splice(onlineIdx, 1)[0];
-        let bipIdx = heads.findIndex(h => h.toUpperCase().includes("BİP")); 
+        let bipIdx = heads.findIndex(h => h.toUpperCase().includes("BİP"));
         if(bipIdx > -1) heads.splice(bipIdx, 0, onlineKey);
         else heads.push(onlineKey);
     }
@@ -156,10 +166,10 @@ window.onload = async function() {
         else heads.push(acigaKey);
     }
 
-    // 3. Tüm taşımalar bittikten SONRA indeksleri hesapla
+    // 3. İndeksleri hesapla
     bipCol = heads.find(x => x.toUpperCase().includes("BİP"));
     phCol = heads.find(x => x.toUpperCase().includes("PHASE"));
-    
+
     db = data;
 
     let toptanIdx = heads.findIndex(h => h.toUpperCase().includes("TOPTAN"));
@@ -190,24 +200,24 @@ inp.addEventListener("input", function(e) {
     closeAllLists();
     if (!val) return false;
     currentFocus = -1;
-    
+
     a = document.createElement("DIV");
     a.setAttribute("id", this.id + "autocomplete-list");
     a.setAttribute("class", "autocomplete-items");
     this.parentNode.appendChild(a);
-    
+
     let count = 0;
     let searchStr = fixString(val);
-    
+
     for (let i = 0; i < db.length; i++) {
         let code = db[i]["STOK KODU"] || db[i][heads[0]] || "";
         let desc = db[i][heads[1]] || "";
-        
+
         let isStudio = desc.toLowerCase().includes("studioline");
         let targetCol = isStudio ? heads[3] : heads[2];
         let stokMiktari = targetCol && db[i][targetCol] !== undefined && db[i][targetCol] !== "" ? db[i][targetCol] : "0";
         let displayColName = targetCol ? targetCol : "Stok";
-        
+
         if ((code && fixString(code).includes(searchStr)) || (desc && fixString(desc).includes(searchStr))) {
             b = document.createElement("DIV");
             b.innerHTML = `<div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
@@ -226,7 +236,7 @@ inp.addEventListener("input", function(e) {
             });
             a.appendChild(b);
             count++;
-            if (count >= 100) break; 
+            if (count >= 100) break;
         }
     }
 });
@@ -234,11 +244,11 @@ inp.addEventListener("input", function(e) {
 inp.addEventListener("keydown", function(e) {
     let x = document.getElementById(this.id + "autocomplete-list");
     if (x) x = x.getElementsByTagName("div");
-    if (e.keyCode == 40) { 
+    if (e.keyCode == 40) {
         currentFocus++; addActive(x);
-    } else if (e.keyCode == 38) { 
+    } else if (e.keyCode == 38) {
         currentFocus--; addActive(x);
-    } else if (e.keyCode == 13) { 
+    } else if (e.keyCode == 13) {
         e.preventDefault();
         if (currentFocus > -1) {
             if (x) x[currentFocus].click();
@@ -248,7 +258,7 @@ inp.addEventListener("keydown", function(e) {
                 let item = db.find(p => fixString(p["STOK KODU"] || p[heads[0]]) === fixString(v));
                 if(item) cart.push({...item});
             });
-            refreshTable(); 
+            refreshTable();
             this.value = "";
             closeAllLists();
         }
@@ -275,30 +285,49 @@ function closeAllLists(elmnt) {
 }
 document.addEventListener("click", function (e) { closeAllLists(e.target); });
 
-function removeItem(i) { 
-    cart.splice(i, 1); 
+function removeItem(i) {
+    cart.splice(i, 1);
     if (cart.length === 0) manualBundleVal = "";
-    refreshTable(); 
+    refreshTable();
+}
+
+function canliStokGoster(urunKodu) {
+  let canli = window._stokJson && window._stokJson[urunKodu];
+  let span = document.getElementById('stok-val-' + urunKodu);
+  if (!span) return;
+  if (canli === undefined || canli === null) {
+    span.textContent = '?';
+    span.className = 'stok-sifir';
+  } else if (canli === 0) {
+    span.textContent = '0';
+    span.className = 'stok-sifir';
+  } else {
+    span.textContent = canli;
+    span.className = 'stok-canli';
+  }
+  let btn = span.nextElementSibling;
+  if (btn) btn.style.display = 'none';
 }
 
 function refreshTable() {
-  const bR = document.getElementById('bR'); 
+  const bR = document.getElementById('bR');
   bR.innerHTML = "";
   if (cart.length === 0) { manualBundleVal = ""; partialHavale=""; partialTek=""; }
 
   cart.forEach((item, i) => {
     let tr = document.createElement('tr');
     let itemCode = fixString(item[heads[0]]);
-    let descContent = heads[1] 
-      ? (linkMap[itemCode] 
-          ? `<a href="${linkMap[itemCode]}" target="_blank" class="p-link">${item[heads[1]]}</a>` 
-          : item[heads[1]]) 
+    let urunKodu = item[heads[0]] || '';
+    let descContent = heads[1]
+      ? (linkMap[itemCode]
+          ? `<a href="${linkMap[itemCode]}" target="_blank" class="p-link">${item[heads[1]]}</a>`
+          : item[heads[1]])
       : "";
 
     let cells = `
       <td>
         <button class="btn-del" onclick="removeItem(${i})">SİL</button><br>
-        ${item[heads[0]]}
+        ${urunKodu}
       </td>
     `;
 
@@ -306,10 +335,17 @@ function refreshTable() {
       let v = item[h];
       let colIndex = hIdx + 1;
       let hT = h.toUpperCase();
-      let wrapClass = isWrapCol(hT) ? ' class="wrap-col"' : '';
 
       if (hIdx === 0) {
+        // Açıklama
         cells += `<td style="white-space:normal;">${descContent}</td>`;
+      } else if (hIdx === 1) {
+        // HOROZ STOK — Excel değeri + canlı stok butonu
+        let excelStok = (v !== undefined && v !== "") ? v : '0';
+        cells += `<td>
+          <span id="stok-val-${urunKodu}">${excelStok}</span>
+          <button class="stok-canli-btn" onclick="canliStokGoster('${urunKodu}')">🔄 canlı stok</button>
+        </td>`;
       } else if (hT.includes("BEKLEYEN")) {
         cells += `<td>${v || '0'}</td>`;
       } else if (hT.includes("ONLINE")) {
@@ -325,24 +361,24 @@ function refreshTable() {
       }
     });
 
-    tr.innerHTML = cells; 
+    tr.innerHTML = cells;
     bR.appendChild(tr);
   });
   calc();
 }
 
 function calc() {
-  if(cart.length === 0) { 
-    document.getElementById('fR').innerHTML = ""; 
-    return; 
+  if(cart.length === 0) {
+    document.getElementById('fR').innerHTML = "";
+    return;
   }
   let t = { base:{}, disc:0 };
   let bVal = parseFloat(manualBundleVal) || 0;
 
   cart.forEach(p => {
     t.disc += (Math.ceil(p[bipCol])||0) + (Math.ceil(p[phCol])||0);
-    heads.forEach((h, i) => { 
-      if(i >= priceStartIndex) t.base[i] = (t.base[i]||0) + (Math.ceil(parseFloat(p[h]))||0); 
+    heads.forEach((h, i) => {
+      if(i >= priceStartIndex) t.base[i] = (t.base[i]||0) + (Math.ceil(parseFloat(p[h]))||0);
     });
   });
 
