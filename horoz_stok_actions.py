@@ -48,8 +48,8 @@ def get_all_stok():
     data = {
         "__VIEWSTATE": parser.viewstate,
         "__EVENTVALIDATION": parser.eventvalidation,
-        "txtKullaniciAdi": KULLANICI,
-        "txtSifre": SIFRE,
+        "txtUserName": KULLANICI,
+        "txtPassword": SIFRE,
         "bntLogin": "Giriş yap",
     }
     r2 = session.post("https://app3.horoz.com.tr/wsKurumsal/frmGiris.aspx", data=data, timeout=30, allow_redirects=True)
