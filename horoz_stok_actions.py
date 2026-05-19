@@ -3,7 +3,7 @@ import json
 import time
 import traceback
 import requests
-from playwright.sync_api import sync_playwright
+from html.parser import HTMLParser
 
 KULLANICI = os.environ["HOROZ_KULLANICI"]
 SIFRE = os.environ["HOROZ_SIFRE"]
@@ -14,41 +14,38 @@ def log(msg):
     print(msg)
     log_lines.append(str(msg))
 
+class VSParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.fields = {}
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        name = attrs.get("name", "")
+        value = attrs.get("value", "")
+        if name and tag in ("input",):
+            self.fields[name] = value
+
 def get_all_stok():
     stok = {}
-
-    # 1. requests ile login
     session = requests.Session()
     session.headers.update({
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "tr-TR,tr;q=0.9",
     })
 
+    # 1. Login
     r = session.get("https://app3.horoz.com.tr/wsKurumsal/frmGiris.aspx", timeout=30)
-
-    from html.parser import HTMLParser
-    class VSParser(HTMLParser):
-        def __init__(self):
-            super().__init__()
-            self.viewstate = ""
-            self.eventvalidation = ""
-        def handle_starttag(self, tag, attrs):
-            attrs = dict(attrs)
-            if attrs.get("id") == "__VIEWSTATE":
-                self.viewstate = attrs.get("value", "")
-            if attrs.get("id") == "__EVENTVALIDATION":
-                self.eventvalidation = attrs.get("value", "")
-
     parser = VSParser()
     parser.feed(r.text)
 
-    data = {
-        "__VIEWSTATE": parser.viewstate,
-        "__EVENTVALIDATION": parser.eventvalidation,
-        "txtUserName": KULLANICI,
-        "txtPassword": SIFRE,
-        "bntLogin": "Giriş yap",
-    }
-    r2 = session.post("https://app3.horoz.com.tr/wsKurumsal/frmGiris.aspx", data=data, timeout=30, allow_redirects=True)
+    login_data = dict(parser.fields)
+    login_data["txtUserName"] = KULLANICI
+    login_data["txtPassword"] = SIFRE
+    login_data["bntLogin"] = "Giriş yap"
+
+    r2 = session.post("https://app3.horoz.com.tr/wsKurumsal/frmGiris.aspx",
+                      data=login_data, timeout=30, allow_redirects=True)
     log(f"Login URL: {r2.url}")
 
     if "frmGiris" in r2.url:
@@ -56,91 +53,130 @@ def get_all_stok():
         return stok
     log("Giriş başarılı!")
 
-    cookies = [{"name": c.name, "value": c.value, "domain": c.domain or ".horoz.com.tr", "path": "/"} for c in session.cookies]
-    log(f"Cookie sayısı: {len(cookies)}")
+    # 2. Stok sorgulama sayfasını aç — viewstate al
+    r3 = session.get("https://app4.horoz.com.tr/wsEvTeslim/_sorgu/EvTeslim/Depo/frmStokSorgulama.aspx", timeout=30)
+    log(f"Stok sayfa status: {r3.status_code}")
 
-    # 2. Playwright — cookie ile başla
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True, slow_mo=0)
-        context = browser.new_context()
-        context.add_cookies(cookies)
-        page = context.new_page()
+    parser2 = VSParser()
+    parser2.feed(r3.text)
+    vs = parser2.fields.get("__VIEWSTATE", "")
+    ev = parser2.fields.get("__EVENTVALIDATION", "")
+    vsg = parser2.fields.get("__VIEWSTATEGENERATOR", "")
+    log(f"ViewState uzunluğu: {len(vs)}")
 
-        page.goto("https://app4.horoz.com.tr/wsEvTeslim/frmDefault.aspx", wait_until="domcontentloaded", timeout=60000)
-        time.sleep(3)
-        log(f"app4 URL: {page.url}")
+    # 3. Listele POST — payload'dan aldığımız değerler
+    stok_data = {
+        "__EVENTTARGET": "",
+        "__EVENTARGUMENT": "",
+        "__VIEWSTATE": vs,
+        "__VIEWSTATEGENERATOR": vsg,
+        "__EVENTVALIDATION": ev,
+        "ASPxRoundPanel1_lstMusteri_ComboBox_VI": "7160",
+        "ASPxRoundPanel1$lstMusteri$pnlComboState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1_lstSube_ComboBox_VI": "406",
+        "ASPxRoundPanel1$lstSube$pnlComboState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1$lstBayi$ComboBox$State": '{"validationState":""}',
+        "ASPxRoundPanel1_lstBayi_ComboBox_VI": "2103",
+        "ASPxRoundPanel1$lstBayi$ComboBox": "GOKMEN TEKNOLOJI URUNLERI PAZARLAMASANAYI VE TICAR",
+        "ASPxRoundPanel1$lstBayi$ComboBox$DDDState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1$lstBayi$ComboBox$DDD$L$State": '{"CustomCallback":""}',
+        "ASPxRoundPanel1$lstBayi$ComboBox$DDD$L": "2103",
+        "ASPxRoundPanel1$lstBayi$pnlComboState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1_lstSatisOrgList_ComboBox_VI": "",
+        "ASPxRoundPanel1$lstSatisOrgList$ComboBox": "Lütfen bir seçim yapınız..",
+        "ASPxRoundPanel1$lstSatisOrgList$ComboBox$DDDState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1$lstSatisOrgList$ComboBox$DDD$L$State": '{"CustomCallback":""}',
+        "ASPxRoundPanel1$lstSatisOrgList$ComboBox$DDD$L": "",
+        "ASPxRoundPanel1$lstSatisOrgList$pnlComboState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1$chkBakiye": "on",
+        "ASPxRoundPanel1_lstUrunGrupList_ComboBox_VI": "",
+        "ASPxRoundPanel1$lstUrunGrupList$ComboBox": "Lütfen bir seçim yapınız..",
+        "ASPxRoundPanel1$lstUrunGrupList$ComboBox$DDDState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1$lstUrunGrupList$ComboBox$DDD$L$State": '{"CustomCallback":""}',
+        "ASPxRoundPanel1$lstUrunGrupList$ComboBox$DDD$L": "",
+        "ASPxRoundPanel1$lstUrunGrupList$pnlComboState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1$txtUrunKodu$ASPxTextBox1": "",
+        "ASPxRoundPanel1$txtUrunKodu$pnlTextState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1$txtUrunAdi$ASPxTextBox1": "",
+        "ASPxRoundPanel1$txtUrunAdi$pnlTextState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1_lstUrunTipiList_ComboBox_VI": "",
+        "ASPxRoundPanel1$lstUrunTipiList$ComboBox": "Lütfen bir seçim yapınız..",
+        "ASPxRoundPanel1$lstUrunTipiList$ComboBox$DDDState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1$lstUrunTipiList$ComboBox$DDD$L$State": '{"CustomCallback":""}',
+        "ASPxRoundPanel1$lstUrunTipiList$ComboBox$DDD$L": "",
+        "ASPxRoundPanel1$lstUrunTipiList$pnlComboState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1$tarih$dx_txt_Tarih$State": '{"useMinDateInsteadOfNull":false,"rawValue":"N"}',
+        "ASPxRoundPanel1$tarih$dx_txt_Tarih": "",
+        "ASPxRoundPanel1$tarih$dx_txt_Tarih$DDDState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1$tarih$dx_txt_Tarih$DDD$C": '{"visibleDate":"05/19/2026","initialVisibleDate":"05/19/2026","selectedDates":[]}',
+        "ASPxRoundPanel1$tarih$pnlTarihState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1$btnListele$ASPxButton1": "Listele",
+        "ASPxRoundPanel1$btnListele$popupControlState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1$lnkYardim$pnlYardimLinkState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "ASPxRoundPanel1$lnkYardim$pnlEkranState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+        "DXScript": "1_11,1_12,1_255,1_23,1_64,1_14,1_15,1_183,1_189,1_17,1_41,1_184,1_21,1_22,1_190,1_186,1_193,1_192,1_194,1_8,1_182,1_49,1_42",
+        "DXCss": "1_74,1_68,1_73,1_210,1_207,1_209,1_206",
+    }
 
-        # 3. Ev Teslim Sorgular
-        page.locator("span.x-panel-header-text", has_text="Ev Teslim Sorgular").click(timeout=15000)
-        log("Ev Teslim Sorgular tıklandı")
-        time.sleep(8)
+    r4 = session.post(
+        "https://app4.horoz.com.tr/wsEvTeslim/_sorgu/EvTeslim/Depo/frmStokSorgulama.aspx",
+        data=stok_data, timeout=60
+    )
+    log(f"Stok POST status: {r4.status_code}, boyut: {len(r4.text)}")
 
-        # 4. Stok Sorgulama
-        stok_menu = page.locator("span.x-menu-item-text", has_text="Stok Sorgulama")
-        stok_menu.wait_for(state="visible", timeout=15000)
-        stok_menu.click(timeout=15000, force=True)
-        log("Stok Sorgulama tıklandı")
-        time.sleep(10)
-        log(f"Frame'ler: {[f.url for f in page.frames]}")
+    # 4. HTML'den veriyi parse et
+    from html.parser import HTMLParser as HP
 
-        # 5. frmStokSorgulama frame'i bekle
-        stok_frame = None
-        for _ in range(30):
-            time.sleep(1)
-            for frame in page.frames:
-                if "frmStokSorgulama" in frame.url:
-                    stok_frame = frame
-                    break
-            if stok_frame:
-                break
+    class TableParser(HP):
+        def __init__(self):
+            super().__init__()
+            self.in_row = False
+            self.in_cell = False
+            self.current_row = []
+            self.current_cell = ""
+            self.rows = []
+            self.row_class = ""
 
-        if stok_frame is None:
-            log("HATA: Stok frame bulunamadı!")
-            browser.close()
-            return stok
-        log(f"Stok frame: {stok_frame.url}")
+        def handle_starttag(self, tag, attrs):
+            attrs = dict(attrs)
+            if tag == "tr":
+                self.row_class = attrs.get("class", "")
+                if "dxgvDataRow" in self.row_class:
+                    self.in_row = True
+                    self.current_row = []
+            if tag == "td" and self.in_row:
+                self.in_cell = True
+                self.current_cell = ""
 
-        # 6. Listele
-        stok_frame.locator("span.dx-vam", has_text="Listele").click(timeout=15000)
-        log("Listele tıklandı")
-        time.sleep(8)
+        def handle_endtag(self, tag):
+            if tag == "td" and self.in_cell:
+                self.current_row.append(self.current_cell.strip())
+                self.in_cell = False
+            if tag == "tr" and self.in_row:
+                self.rows.append(self.current_row)
+                self.in_row = False
 
-        # 7. Kayıt sayısı 500
-        try:
-            stok_frame.locator(".dxp-dropDownButton").click(timeout=10000)
-            time.sleep(1)
-            stok_frame.locator("span.dx-vam", has_text="500").click(timeout=10000)
-            log("Kayıt sayısı 500 tıklandı")
-            time.sleep(8)
-        except Exception as e:
-            log(f"Kayıt sayısı ayarlanamadı: {e}")
+        def handle_data(self, data):
+            if self.in_cell:
+                self.current_cell += data
 
-        # 8. JS ile satırları oku
-        log("Satırlar okunuyor...")
-        result = stok_frame.evaluate("""
-            () => {
-                const rows = document.querySelectorAll('tr.dxgvDataRow_Office2010Blue');
-                const data = [];
-                rows.forEach(row => {
-                    const cells = row.querySelectorAll('td.dxgv');
-                    if (cells.length > 5) {
-                        const kod = cells[2].textContent.trim();
-                        const stok = cells[5].textContent.trim();
-                        if (kod) data.push([kod, stok]);
-                    }
-                });
-                return data;
-            }
-        """)
-        log(f"Toplam satır: {len(result)}")
+    tp = TableParser()
+    tp.feed(r4.text)
+    log(f"Bulunan satır sayısı: {len(tp.rows)}")
 
-        for kod, miktar_str in result:
-            try:
-                stok[kod] = int(float(miktar_str.replace(',', '.'))) if miktar_str else 0
-            except:
-                stok[kod] = 0
+    if tp.rows:
+        log(f"Örnek satır: {tp.rows[0]}")
 
-        browser.close()
+    for row in tp.rows:
+        if len(row) > 5:
+            kod = row[2].strip()
+            miktar_str = row[5].strip()
+            if kod and kod != "":
+                try:
+                    stok[kod] = int(float(miktar_str.replace(",", "."))) if miktar_str else 0
+                except:
+                    stok[kod] = 0
+
     return stok
 
 if __name__ == "__main__":
@@ -151,6 +187,8 @@ if __name__ == "__main__":
         with open("stok.json", "w", encoding="utf-8") as f:
             json.dump(stok, f, ensure_ascii=False, indent=2)
         log("stok.json yazıldı.")
+        if stok:
+            log(json.dumps(dict(list(stok.items())[:5]), ensure_ascii=False))
     except Exception as e:
         log(f"HATA: {e}")
         log(traceback.format_exc())
