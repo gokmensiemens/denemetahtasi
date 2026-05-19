@@ -17,15 +17,13 @@ def log(msg):
 def get_all_stok():
     stok = {}
 
-    # 1. requests ile login — cookie al
+    # 1. requests ile login
     session = requests.Session()
     session.headers.update({
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36",
     })
 
-    # Login sayfasını çek — viewstate al
     r = session.get("https://app3.horoz.com.tr/wsKurumsal/frmGiris.aspx", timeout=30)
-    log(f"Login sayfası status: {r.status_code}")
 
     from html.parser import HTMLParser
     class VSParser(HTMLParser):
@@ -42,9 +40,7 @@ def get_all_stok():
 
     parser = VSParser()
     parser.feed(r.text)
-    log(f"ViewState uzunluğu: {len(parser.viewstate)}")
 
-    # Login POST
     data = {
         "__VIEWSTATE": parser.viewstate,
         "__EVENTVALIDATION": parser.eventvalidation,
@@ -53,34 +49,33 @@ def get_all_stok():
         "bntLogin": "Giriş yap",
     }
     r2 = session.post("https://app3.horoz.com.tr/wsKurumsal/frmGiris.aspx", data=data, timeout=30, allow_redirects=True)
-    log(f"Login POST status: {r2.status_code}, URL: {r2.url}")
+    log(f"Login URL: {r2.url}")
 
     if "frmGiris" in r2.url:
         log("Giriş başarısız!")
         return stok
     log("Giriş başarılı!")
 
-    # 2. Playwright'a cookie'leri aktar
     cookies = [{"name": c.name, "value": c.value, "domain": c.domain or ".horoz.com.tr", "path": "/"} for c in session.cookies]
     log(f"Cookie sayısı: {len(cookies)}")
 
+    # 2. Playwright — cookie ile başla
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True, slow_mo=0)
         context = browser.new_context()
         context.add_cookies(cookies)
         page = context.new_page()
 
-        # 3. app4'e git
-        page.goto("https://app4.horoz.com.tr/wsEvTeslim/frmDefault.aspx", wait_until="load", timeout=30000)
+        page.goto("https://app4.horoz.com.tr/wsEvTeslim/frmDefault.aspx", wait_until="domcontentloaded", timeout=60000)
         time.sleep(3)
         log(f"app4 URL: {page.url}")
 
-        # 4. Ev Teslim Sorgular
+        # 3. Ev Teslim Sorgular
         page.locator("span.x-panel-header-text", has_text="Ev Teslim Sorgular").click(timeout=15000)
         log("Ev Teslim Sorgular tıklandı")
         time.sleep(8)
 
-        # 5. Stok Sorgulama
+        # 4. Stok Sorgulama
         stok_menu = page.locator("span.x-menu-item-text", has_text="Stok Sorgulama")
         stok_menu.wait_for(state="visible", timeout=15000)
         stok_menu.click(timeout=15000, force=True)
@@ -88,7 +83,7 @@ def get_all_stok():
         time.sleep(10)
         log(f"Frame'ler: {[f.url for f in page.frames]}")
 
-        # 6. frmStokSorgulama frame'i bekle
+        # 5. frmStokSorgulama frame'i bekle
         stok_frame = None
         for _ in range(30):
             time.sleep(1)
@@ -105,12 +100,12 @@ def get_all_stok():
             return stok
         log(f"Stok frame: {stok_frame.url}")
 
-        # 7. Listele
+        # 6. Listele
         stok_frame.locator("span.dx-vam", has_text="Listele").click(timeout=15000)
         log("Listele tıklandı")
         time.sleep(8)
 
-        # 8. Kayıt sayısı 500
+        # 7. Kayıt sayısı 500
         try:
             stok_frame.locator(".dxp-dropDownButton").click(timeout=10000)
             time.sleep(1)
@@ -120,7 +115,7 @@ def get_all_stok():
         except Exception as e:
             log(f"Kayıt sayısı ayarlanamadı: {e}")
 
-        # 9. JS ile satırları oku
+        # 8. JS ile satırları oku
         log("Satırlar okunuyor...")
         result = stok_frame.evaluate("""
             () => {
