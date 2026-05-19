@@ -31,6 +31,10 @@ jobs:
           HOROZ_SIFRE: ${{ secrets.HOROZ_SIFRE }}
         run: python horoz_stok_actions.py
 
+      - name: Log göster
+        if: always()
+        run: cat horoz_log.txt || echo "Log dosyası yok"
+
       - name: stok.json'ı commit et
         run: |
           git config user.name "github-actions[bot]"
