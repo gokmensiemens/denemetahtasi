@@ -49,6 +49,13 @@
     #btnCanliStok { background: #9C1936; color: white; border: none; border-radius: 6px; padding: 6px 16px; font-size: 12px; font-weight: bold; cursor: pointer; white-space: nowrap; }
     #btnCanliStok:hover { background: #7a1229; }
     #stokGuncelMsg { font-size: 11px; color: #888; margin-left: 8px; }
+    /* VKN Sorgu */
+    #vknBar { display:flex; align-items:center; gap:6px; }
+    #vknInp { padding:5px 10px; border:2px solid #6c63ff; border-radius:6px; font-size:12px; width:160px; }
+    #btnVkn { background:#6c63ff; color:white; border:none; border-radius:6px; padding:6px 12px; font-size:12px; font-weight:bold; cursor:pointer; white-space:nowrap; }
+    #btnVkn:hover { background:#5548e0; }
+    #vknSonuc { font-size:11px; color:#333; max-width:320px; background:#f0eeff; border:1px solid #6c63ff; border-radius:6px; padding:5px 10px; display:none; line-height:1.6; }
+
     /* Canlı stok yeşil nokta */
     @keyframes pulse-dot {
       0%, 100% { opacity: 1; transform: scale(1); }
@@ -72,6 +79,12 @@
     <div style="display:flex; align-items:center;">
       <button id="btnCanliStok" onclick="canliStokTumunuGuncelle()">🔄 Horoz Lojistik'ten Güncel Stok Getir</button>
       <span id="stokGuncelMsg"></span>
+      <div id="vknBar">
+        <input id="vknInp" type="text" placeholder="VKN / TCKN girin..." maxlength="11"
+          onkeydown="if(event.key==='Enter') vknSorgula()">
+        <button id="btnVkn" onclick="vknSorgula()">🔍 Ünvan Sorgula</button>
+        <span id="vknSonuc"></span>
+      </div>
     </div>
   </div>
   <div class="search-container">
@@ -328,6 +341,42 @@ function removeItem(i) {
     wrap.insertBefore(dot, span);
   }
 
+
+async function vknSorgula() {
+  let vkn = document.getElementById('vknInp').value.trim();
+  let sonuc = document.getElementById('vknSonuc');
+  if (!vkn || (vkn.length !== 10 && vkn.length !== 11)) {
+    sonuc.style.display = 'inline-block';
+    sonuc.style.color = '#dc3545';
+    sonuc.innerHTML = '⚠️ 10 veya 11 haneli numara girin';
+    return;
+  }
+  sonuc.style.display = 'inline-block';
+  sonuc.style.color = '#333';
+  sonuc.innerHTML = '⏳ Sorgulanıyor...';
+  try {
+    let res = await fetch('https://api.mukellef.info/v2/query.php?taxNumber=' + vkn, {
+      headers: { 'ApiKey': 'd0f09c37-0525-4ebe-91bf-751721c2abda' }
+    });
+    let json = await res.json();
+    if (json.isError || !json.data) {
+      sonuc.innerHTML = '❌ Bulunamadı';
+      sonuc.style.color = '#dc3545';
+      return;
+    }
+    let d = json.data;
+    let unvan = d.title || ((d.firstName || '') + ' ' + (d.lastName || '')).trim();
+    let vd = d.taxOfficeName || '-';
+    let aktif = d.isActive ? '✅ AKTİF' : '❌ PASİF';
+    let efatura = d.eInvoiceResponsible ? '✅' : '❌';
+    let eirsaliye = d.eDespatchResponsible ? '✅' : '❌';
+    sonuc.style.color = '#333';
+    sonuc.innerHTML = `<b>${unvan}</b> &nbsp;|&nbsp; ${vd} &nbsp;|&nbsp; ${aktif} &nbsp;|&nbsp; e-Fatura: ${efatura} &nbsp;|&nbsp; e-İrsaliye: ${eirsaliye}`;
+  } catch(e) {
+    sonuc.innerHTML = '❌ Bağlantı hatası';
+    sonuc.style.color = '#dc3545';
+  }
+}
 async function canliStokTumunuGuncelle() {
   let btn = document.getElementById('btnCanliStok');
   let msg = document.getElementById('stokGuncelMsg');
