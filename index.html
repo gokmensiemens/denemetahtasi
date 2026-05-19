@@ -49,6 +49,20 @@
     #btnCanliStok { background: #9C1936; color: white; border: none; border-radius: 6px; padding: 6px 16px; font-size: 12px; font-weight: bold; cursor: pointer; white-space: nowrap; }
     #btnCanliStok:hover { background: #7a1229; }
     #stokGuncelMsg { font-size: 11px; color: #888; margin-left: 8px; }
+    /* Canlı stok yeşil nokta */
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+    .stok-canli-wrap { position: relative; display: inline-block; }
+    .stok-canli-wrap .pulse-dot {
+      position: absolute; top: -4px; left: -5px;
+      width: 7px; height: 7px;
+      background: #28a745; border-radius: 50%;
+      animation: pulse-dot 1.2s ease-in-out infinite;
+    }
+    .stok-canli-wrap .pulse-dot.dot-red { background: #dc3545; }
+
   </style>
 </head>
 <body>
@@ -296,6 +310,24 @@ function removeItem(i) {
     refreshTable();
 }
 
+
+  function _addPulseDot(span, isRed) {
+    let existing = span.closest('.stok-canli-wrap');
+    if (existing) {
+      let dot = existing.querySelector('.pulse-dot');
+      if (dot) dot.className = 'pulse-dot' + (isRed ? ' dot-red' : '');
+      return;
+    }
+    let td = span.parentElement;
+    let wrap = document.createElement('span');
+    wrap.className = 'stok-canli-wrap';
+    td.insertBefore(wrap, span);
+    wrap.appendChild(span);
+    let dot = document.createElement('span');
+    dot.className = 'pulse-dot' + (isRed ? ' dot-red' : '');
+    wrap.insertBefore(dot, span);
+  }
+
 async function canliStokTumunuGuncelle() {
   let btn = document.getElementById('btnCanliStok');
   let msg = document.getElementById('stokGuncelMsg');
@@ -317,16 +349,25 @@ async function canliStokTumunuGuncelle() {
     let urunKodu = item[heads[0]] || '';
     let span = document.getElementById('stok-val-' + urunKodu);
     if (!span) return;
+    // Önceki wrap varsa geri al
+    let wrap = span.closest('.stok-canli-wrap');
+    if (wrap) {
+      wrap.parentElement.insertBefore(span, wrap);
+      wrap.remove();
+    }
     let canli = window._stokJson[urunKodu];
     if (canli === undefined || canli === null) {
       span.textContent = '?';
       span.className = 'stok-sifir';
+      _addPulseDot(span, true);
     } else if (canli === 0) {
       span.textContent = '0';
       span.className = 'stok-sifir';
+      _addPulseDot(span, true);
     } else {
       span.textContent = canli;
       span.className = 'stok-canli';
+      _addPulseDot(span, false);
     }
     guncellenen++;
   });
