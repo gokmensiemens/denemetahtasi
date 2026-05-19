@@ -115,6 +115,10 @@ def get_all_stok():
         "ASPxRoundPanel1$lnkYardim$pnlYardimLinkState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
         "ASPxRoundPanel1$lnkYardim$pnlEkranState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
         "DXScript": "1_11,1_12,1_255,1_23,1_64,1_14,1_15,1_183,1_189,1_17,1_41,1_184,1_21,1_22,1_190,1_186,1_193,1_192,1_194,1_8,1_182,1_49,1_42",
+        "__CALLBACKID": "grid$dgGrid",
+        "__CALLBACKPARAM": "c0:KV|2;[];CT|2;{};CR|2;{};GB|23;12|PAGERONCLICK6|PSP500;",
+        "grid$dgGrid$DXPagerBottom$PSP": '{"selectedItemIndexPath":"5","checkedState":""}',
+        "grid$dgGrid$custwindowState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
         "DXCss": "1_74,1_68,1_73,1_210,1_207,1_209,1_206",
     }
 
