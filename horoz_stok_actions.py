@@ -155,4 +155,7 @@ if __name__ == "__main__":
         log(f"HATA: {e}")
         log(traceback.format_exc())
     finally:
-        print("\n".join(log_lines))
+        output = "\n".join(log_lines)
+        print(output)
+        with open("horoz_log.txt", "w", encoding="utf-8") as f:
+            f.write(output)
