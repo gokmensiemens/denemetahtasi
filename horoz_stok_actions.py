@@ -115,10 +115,7 @@ def get_all_stok():
         "ASPxRoundPanel1$lnkYardim$pnlYardimLinkState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
         "ASPxRoundPanel1$lnkYardim$pnlEkranState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
         "DXScript": "1_11,1_12,1_255,1_23,1_64,1_14,1_15,1_183,1_189,1_17,1_41,1_184,1_21,1_22,1_190,1_186,1_193,1_192,1_194,1_8,1_182,1_49,1_42",
-        "__CALLBACKID": "grid$dgGrid",
-        "__CALLBACKPARAM": "c0:KV|2;[];CT|2;{};CR|2;{};GB|23;12|PAGERONCLICK6|PSP500;",
-        "grid$dgGrid$DXPagerBottom$PSP": '{"selectedItemIndexPath":"5","checkedState":""}',
-        "grid$dgGrid$custwindowState": '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}',
+
         "DXCss": "1_74,1_68,1_73,1_210,1_207,1_209,1_206",
     }
 
@@ -127,6 +124,34 @@ def get_all_stok():
         data=stok_data, timeout=60
     )
     log(f"Stok POST status: {r4.status_code}, boyut: {len(r4.text)}")
+
+    # callbackState'i r4'ten al
+    import re as _re
+    cs_match = _re.search(r'"callbackState"\s*:\s*"([^"]+)"', r4.text)
+    callback_state = cs_match.group(1) if cs_match else ""
+    log(f"callbackState uzunluğu: {len(callback_state)}")
+
+    # Sayfa boyutunu 500'e çıkar — callback isteği
+    vs2_match = _re.search(r'id="__VIEWSTATE"\s+value="([^"]+)"', r4.text)
+    ev2_match = _re.search(r'id="__EVENTVALIDATION"\s+value="([^"]+)"', r4.text)
+    vs2 = vs2_match.group(1) if vs2_match else vs
+    ev2 = ev2_match.group(1) if ev2_match else ev
+
+    callback_data = dict(stok_data)
+    callback_data["__VIEWSTATE"] = vs2
+    callback_data["__EVENTVALIDATION"] = ev2
+    callback_data["__CALLBACKID"] = "grid$dgGrid"
+    callback_data["__CALLBACKPARAM"] = "c0:KV|2;[];CT|2;{};CR|2;{};GB|23;12|PAGERONCLICK6|PSP500;"
+    callback_data["grid$dgGrid"] = '{"groupLevelState":{},"selection":"","callbackState":"' + callback_state + '","resizingState":"{}","keys":[],"toolbar":"{}"}'
+    callback_data["grid$dgGrid$DXPagerBottom$PSP"] = '{"selectedItemIndexPath":"5","checkedState":""}'
+    callback_data["grid$dgGrid$custwindowState"] = '{"windowsState":"0:0:-1:0:0:0:-10000:-10000:1:0:0:0"}'
+
+    r5 = session.post(
+        "https://app4.horoz.com.tr/wsEvTeslim/_sorgu/EvTeslim/Depo/frmStokSorgulama.aspx",
+        data=callback_data, timeout=60
+    )
+    log(f"Callback POST status: {r5.status_code}, boyut: {len(r5.text)}")
+    r4 = r5  # parse için r4'ü güncelle
 
     # 4. HTML'den veriyi parse et
     from html.parser import HTMLParser as HP
