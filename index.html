@@ -357,9 +357,11 @@ async function canliStokTumunuGuncelle() {
     }
     let canli = window._stokJson[urunKodu];
     if (canli === undefined || canli === null) {
-      span.textContent = '?';
+      span.textContent = '0';
       span.className = 'stok-sifir';
       _addPulseDot(span, true);
+      guncellenen++;
+      return;
     } else if (canli === 0) {
       span.textContent = '0';
       span.className = 'stok-sifir';
